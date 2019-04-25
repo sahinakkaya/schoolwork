@@ -1,0 +1,15 @@
+[submodule "2017/BIL103E Intr. to Inf. Syst.&Comp. Eng./assignment-1/source"]
+	path = 2017/BIL103E Intr. to Inf. Syst.&Comp. Eng./assignment-1/source
+	url = https://github.com/Asocia/a1-Asocia.git
+[submodule "2017/BIL103E Intr. to Inf. Syst.&Comp. Eng./assignment-2/source"]
+	path = 2017/BIL103E Intr. to Inf. Syst.&Comp. Eng./assignment-2/source
+	url = https://github.com/Asocia/a2-Asocia.git
+[submodule "2017/BIL103E Intr. to Inf. Syst.&Comp. Eng./assignment-3/source"]
+	path = 2017/BIL103E Intr. to Inf. Syst.&Comp. Eng./assignment-3/source
+	url = https://github.com/Asocia/a3-Asocia.git
+[submodule "2018/BLG 252E Object Oriented Programming/assignment-2/tests"]
+	path = 2018/BLG 252E Object Oriented Programming/assignment-2/tests
+	url = https://github.com/fatihaltinpinar/oophw2-calico.git
+[submodule "2018/BLG 252E Object Oriented Programming/assignment-2/unofficial_tests"]
+	path = 2018/BLG 252E Object Oriented Programming/assignment-2/unofficial_tests
+	url = https://github.com/fatihaltinpinar/oophw2-calico.git

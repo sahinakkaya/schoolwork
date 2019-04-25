@@ -1,0 +1,27 @@
+function allOperations
+inc a -5
+dec b 5
+mul a b
+div a c
+call hello a
+call world b
+inc a b
+return a
+function hello
+mul a 7
+inc b 6
+div b 3
+div a b
+call world a
+return b
+function world
+inc b 6
+mul b b
+inc a b
+inc b a
+return b
+function main
+inc c 5
+call allOperations c
+inc b a
+return b

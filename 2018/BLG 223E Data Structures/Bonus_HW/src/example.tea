@@ -1,0 +1,16 @@
+function main
+inc a 2
+inc b 3
+call foo a
+call bar b
+inc d a
+inc d c
+return d
+function foo
+inc a 4
+div a 2
+return a
+function bar
+inc c 7
+dec c b
+return c
