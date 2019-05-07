@@ -12,7 +12,7 @@ garlic	2	10	0.5
 cashew	2	10	1
 carrot	2	15	0.6
 lemon	2	10	0.2
-red pepper	2	5	0.3
+red paper	2	5	0.3
 ceaser salad	2	5	15
 bbq salad	2	3	10
 green salad	2	3	12
