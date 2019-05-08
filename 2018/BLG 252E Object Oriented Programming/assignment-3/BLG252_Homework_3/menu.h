@@ -1,3 +1,5 @@
+#ifndef MENU_H
+#define MENU_H
 #include "ingredient.h"
 #include <fstream>
 #include <vector>
@@ -10,3 +12,4 @@ class Menu{
         Menu(ifstream&);
         void print();
 };
+#endif

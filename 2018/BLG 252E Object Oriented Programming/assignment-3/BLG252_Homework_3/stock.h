@@ -1,3 +1,5 @@
+#ifndef STOCK_H
+#define STOCK_H
 #include "ingredient.h"
 #include <fstream>
 #include <vector>
@@ -15,3 +17,4 @@ class Stock{
         void print(FILE* file = stdout);
         void write_to_file(const char* filename="stock.txt");
 };
+#endif
