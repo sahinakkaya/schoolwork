@@ -4,7 +4,7 @@ FLAGS=-Wall -Werror
 RM=rm -f
 
 SRCS=main.cpp
-OBJS=main.o ingredient.o
+OBJS=main.o ingredient.o stock.o helper_functions.o menu.o
 
 all: main
 
@@ -12,7 +12,9 @@ main: $(OBJS)
 	$(CXX) -std=$(STD) $(FLAGS) -o main $(OBJS) 
 
 ingredient.o: ingredient.h ingredient.cpp
-
+stock.o: stock.h stock.cpp
+helper_functions.o: helper_functions.h helper_functions.cpp
+menu.o: menu.h menu.cpp
 clean:
 	$(RM) $(OBJS)
 	rm main
