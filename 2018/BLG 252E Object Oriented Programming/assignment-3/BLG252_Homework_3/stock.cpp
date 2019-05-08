@@ -33,7 +33,7 @@ double Stock::get_price(string name, int amount){
     return stock[name]->get_cost(amount);
 }
 
-void Stock::print(FILE* file = stdout){
+void Stock::print(FILE* file){
     FILE fp_old = *stdout;  // preserve the original stdout
     *stdout = *file;
     cout << header <<endl;
