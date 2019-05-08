@@ -1,13 +1,31 @@
 #include "helper_functions.h"
 #include <algorithm>
+
+
+bool open_files(const string file_names[], int length, map <string, ifstream*>& files){
+    for(int i = 0; i<length;i++){
+        files[file_names[i]] = new ifstream(file_names[i] + ".txt");
+        if(files[file_names[i]]->fail()){
+            close_files(file_names, i+1, files);
+            cerr << "Cannot open file '" << file_names[i] << ".txt'. No such file." << endl;
+            return false;
+        }
+    }
+    return true;
+}
+
+void close_files(const string file_names[], int length, map <string, ifstream*>& files){
+    for(int i = 0; i<length;i++){
+        files[file_names[i]]->close();
+        delete files[file_names[i]];
+    }
+}
+
 void split(string line, string delim, vector<string>& fields, int num_of_fields){
     int first = 0, last = 0;
-    //cout << line << endl;
     for(int i = 0; i< num_of_fields || num_of_fields == -1;i++){
         last = line.find(delim, first);
         fields.push_back(line.substr(first, last-first));
-        //cout << line.substr(first, last-first) << endl;
-        // cout << "first:" << first << " last: "<< last << endl;
         if(first>last){
             break;
         }
