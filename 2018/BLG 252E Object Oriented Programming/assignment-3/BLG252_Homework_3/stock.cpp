@@ -22,6 +22,12 @@ bool Stock::has_enough_ingredient(string name, int amount){
     return stock[name]->get_item_count() >= amount;
 }
 
+bool Stock::has_enough(tuple<string, int> t, int a){
+    string name = get<0>(t);
+    int amount = get<1>(t) * a;
+    return has_enough_ingredient(name, amount);
+}
+
 void Stock::update(string name, int amount){
     // self.stock[name].item_count -= amount
     int new_item_count = stock[name]->get_item_count() - amount;
