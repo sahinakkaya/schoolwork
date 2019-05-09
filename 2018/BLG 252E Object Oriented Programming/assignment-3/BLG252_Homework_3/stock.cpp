@@ -24,14 +24,16 @@ Stock::Stock(ifstream& file){
     
 }
 
-/*
+/* 
  /brief give back dynamically allocated memory
-*/
+
 Stock::~Stock(){
     for(auto const& x:stock){
-        delete x.second;
+        Ingredient* ing = x.second;
+        delete ing;
+        //delete x.second;
     }
-}
+} Currently causes error with -Wall -Werror flags*/
 
 /*
  /brief check if stock has enough ingredient with given name and amount
