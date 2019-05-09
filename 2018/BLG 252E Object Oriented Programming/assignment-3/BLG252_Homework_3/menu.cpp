@@ -1,5 +1,11 @@
+/* @Author
+* Student Name: Şahin Akkaya
+* Student ID : 150170098
+* Date: 09.05.2019 */
+
 #include "menu.h"
 using namespace std;
+
 /*
  /brief initialize Menu with given file stream
  /param file a reference to input file stream that'll be used for initializing Menu

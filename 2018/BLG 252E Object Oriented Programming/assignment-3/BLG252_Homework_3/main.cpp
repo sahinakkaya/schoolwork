@@ -1,3 +1,8 @@
+/* @Author
+* Student Name: Şahin Akkaya
+* Student ID : 150170098
+* Date: 09.05.2019 */
+
 #include "stock.h"
 #include "menu.h"
 #include "order.h"
