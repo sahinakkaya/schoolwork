@@ -30,11 +30,10 @@ void serve_to_tables(Stock& s, Menu& m, Order& o){
         cout << table_name << " ordered:" <<endl;
         double total_cost = 0, cost, tip, tax;
         for(auto const& order: orders){
-            using namespace placeholders;
             string order_name = get<0>(order);
             int amount = get<1>(order);
             vector<tuple<string, int>> requirements = m.get_menu()[order_name];
-            auto requirement_satisfied = bind(&Stock::has_enough, &s, _1, amount);
+            auto requirement_satisfied = bind(&Stock::has_enough, &s, placeholders::_1, cref(amount));
             bool can_be_served = all_of(requirements.begin(),
                                         requirements.end(),
                                         requirement_satisfied);
