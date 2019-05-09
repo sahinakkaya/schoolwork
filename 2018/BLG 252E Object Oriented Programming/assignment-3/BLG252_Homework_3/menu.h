@@ -10,6 +10,7 @@ class Menu{
     map<string, vector<tuple<string, int>>> menu;
     public:
         Menu(ifstream&);
+        map<string, vector<tuple<string, int>>> get_menu() {return menu;}
         void print();
 };
 #endif

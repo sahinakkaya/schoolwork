@@ -11,6 +11,7 @@ class Order{
 
     public:
         Order(ifstream&);
+        vector<tuple<string, vector<tuple<string, int>>>> get_tables() const {return tables;}
         void print();
 };
 #endif
