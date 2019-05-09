@@ -13,7 +13,7 @@ class Stock{
 /*     void split(string, char, vector<string>&); */
     public:
         Stock(ifstream&);
-        
+        ~Stock();
         bool has_enough(tuple<string, int>, int);
         void update(string, int);
         double get_price(string, int);

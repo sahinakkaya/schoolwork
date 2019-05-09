@@ -14,8 +14,13 @@ Stock::Stock(ifstream& file){
         stock[fields[0]] = ing;
     }
     
-};
+}
 
+Stock::~Stock(){
+    for(auto const& x:stock){
+        delete x.second;
+    }
+}
 
 
 bool Stock::has_enough_ingredient(string name, int amount){
