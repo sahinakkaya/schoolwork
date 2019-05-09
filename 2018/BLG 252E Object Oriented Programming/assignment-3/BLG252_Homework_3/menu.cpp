@@ -1,6 +1,9 @@
 #include "menu.h"
 using namespace std;
-
+/*
+ /brief initialize Menu with given file stream
+ /param file a reference to input file stream that'll be used for initializing Menu
+*/
 Menu::Menu(ifstream& file){
     getline(file, header);
     vector<string> units;
@@ -36,7 +39,9 @@ Menu::Menu(ifstream& file){
         }
     }
 }
-
+/*
+ /brief print menu
+*/
 void Menu::print(){
     for(auto const& x:menu){
         cout << x.first << "\t";

@@ -10,7 +10,6 @@ class Stock{
     string header;
     map<string, Ingredient*> stock;
     bool has_enough_ingredient(string, int);
-/*     void split(string, char, vector<string>&); */
     public:
         Stock(ifstream&);
         ~Stock();

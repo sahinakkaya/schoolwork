@@ -1,6 +1,9 @@
 #include "order.h"
 using namespace std;
-
+/*
+ /brief initialize Order with given file stream
+ /param file a reference to input file stream that'll be used for initializing Order
+*/
 Order::Order(ifstream& file){
     int i = 0;
     while (i++ < NUMBER_OF_TABLES){
@@ -24,7 +27,9 @@ Order::Order(ifstream& file){
         tables.push_back(make_tuple(table_name, orders));
     }
 }
-
+/*
+ /brief print all the orders with their table names
+*/
 void Order::print(){
     for(auto const& table: tables){
         string table_name = get<0>(table);
