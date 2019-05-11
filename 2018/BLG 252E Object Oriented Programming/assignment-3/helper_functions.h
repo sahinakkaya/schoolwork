@@ -1,13 +1,13 @@
 #ifndef HELPER_FUNCTIONS_H
 #define HELPER_FUNCTIONS_H
-#include <iostream>
-#include <vector>
 #include <fstream>
+#include <iostream>
 #include <map>
+#include <vector>
 using namespace std;
 
-bool open_files(const string file_names[], int length, map <string, ifstream*>& files);
-void close_files(const string file_names[], int length, map <string, ifstream*>& files);
+bool open_files(const string file_names[], int length, map<string, ifstream*>& files);
+void close_files(const string file_names[], int length, map<string, ifstream*>& files);
 
 void split(string line, string delim, vector<string>& fields, int num_of_fields);
 

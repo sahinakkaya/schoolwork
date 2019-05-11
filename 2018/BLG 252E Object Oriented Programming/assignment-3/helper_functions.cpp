@@ -8,11 +8,11 @@
  /files a reference to map object that will keep file_name as a key and ifstream* as a value
  /return true if all files can bo opened succesfully, false otherwise
 */
-bool open_files(const string file_names[], int length, map <string, ifstream*>& files){
-    for(int i = 0; i<length;i++){
+bool open_files(const string file_names[], int length, map<string, ifstream*>& files) {
+    for (int i = 0; i < length; i++) {
         files[file_names[i]] = new ifstream(file_names[i] + ".txt");
-        if(files[file_names[i]]->fail()){
-            close_files(file_names, i+1, files);
+        if (files[file_names[i]]->fail()) {
+            close_files(file_names, i + 1, files);
             cerr << "Cannot open file '" << file_names[i] << ".txt'. No such file." << endl;
             return false;
         }
@@ -26,8 +26,8 @@ bool open_files(const string file_names[], int length, map <string, ifstream*>& 
  /param length an integer that is equal to number of files that is going to be closed
  /files a reference to map object that  keeps file_name as a key and ifstream* as a value
 */
-void close_files(const string file_names[], int length, map <string, ifstream*>& files){
-    for(int i = 0; i<length;i++){
+void close_files(const string file_names[], int length, map<string, ifstream*>& files) {
+    for (int i = 0; i < length; i++) {
         files[file_names[i]]->close();
         delete files[file_names[i]];
     }
@@ -40,15 +40,15 @@ void close_files(const string file_names[], int length, map <string, ifstream*>&
  /param fields a vector<string> reference that keeps result of split operation
  /param max_split maximum number of splits to do. -1 (the default value) means no limit.
 */
-void split(string line, string delim, vector<string>& fields, int max_split){
+void split(string line, string delim, vector<string>& fields, int max_split) {
     int first = 0, last = 0;
-    for(int i = 0; i< max_split || max_split == -1;i++){
+    for (int i = 0; i < max_split || max_split == -1; i++) {
         last = line.find(delim, first);
-        fields.push_back(line.substr(first, last-first));
-        if(first>last){
+        fields.push_back(line.substr(first, last - first));
+        if (first > last) {
             break;
         }
-        first = last+delim.length();
+        first = last + delim.length();
     }
 }
 
@@ -58,8 +58,7 @@ void split(string line, string delim, vector<string>& fields, int max_split){
  /param t a string
  /return true if vector contains the string, false otherwise
 */
-bool vector_contains(const vector<string>& v, string& t)
-{
+bool vector_contains(const vector<string>& v, string& t) {
     bool found = (std::find(v.begin(), v.end(), t) != v.end());
     return found;
 }
@@ -72,12 +71,12 @@ bool vector_contains(const vector<string>& v, string& t)
  /end an integer that shows the ending index of the concatenation operation, default -1 which means until the very end
  /return concatenated string
 */
-string join(string join_with, vector<string>& v, int begin, int end){
+string join(string join_with, vector<string>& v, int begin, int end) {
     string s = "";
-    if(end == -1)
-        end = (int) v.size();
-    for(int i = begin; i< end; i++){
+    if (end == -1)
+        end = (int)v.size();
+    for (int i = begin; i < end; i++) {
         s += join_with + v[i];
     }
-    return s.substr(1,s.length()-1);
+    return s.substr(1, s.length() - 1);
 }

@@ -5,18 +5,18 @@
 
 #ifndef ORDER_H
 #define ORDER_H
-#include "ingredient.h"
-#include <vector>
-#include <tuple>
 #include <fstream>
+#include <tuple>
+#include <vector>
+#include "ingredient.h"
 #define NUMBER_OF_TABLES 5
 
-class Order{
+class Order {
     vector<tuple<string, vector<tuple<string, int>>>> tables;
 
-    public:
-        Order(ifstream&);
-        vector<tuple<string, vector<tuple<string, int>>>> get_tables() const {return tables;}
-        void print();
+   public:
+    Order(ifstream&);
+    vector<tuple<string, vector<tuple<string, int>>>> get_tables() const { return tables; }
+    void print();
 };
 #endif

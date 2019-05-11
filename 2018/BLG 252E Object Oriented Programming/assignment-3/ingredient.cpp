@@ -12,13 +12,13 @@ using namespace std;
  /param item_count an integer that shows how much "name" ingredient in the stock
  /param price a double that corresponds to price per type of "name" ingredient
 */
-BaseIngredient::BaseIngredient(string name, int item_count, double price){
+BaseIngredient::BaseIngredient(string name, int item_count, double price) {
     this->name = name;
     this->item_count = item_count;
     this->price = price;
 }
 
-map<char, string> Ingredient::unit_of_types = {{'1', "gram"}, {'2',""}, {'3',"ml"}};
+map<char, string> Ingredient::unit_of_types = {{'1', "gram"}, {'2', ""}, {'3', "ml"}};
 
 /*
  /brief initiliaze Ingredient class
@@ -27,11 +27,7 @@ map<char, string> Ingredient::unit_of_types = {{'1', "gram"}, {'2',""}, {'3',"ml
  /param item_count a string that shows how much "name" ingredient in the stock
  /param price a string that corresponds to price per type of "name" ingredient
 */
-Ingredient::Ingredient(string name, string type, string item_count, string price): 
-            BaseIngredient(name, stoi(item_count), stod(price))
-{ 
+Ingredient::Ingredient(string name, string type, string item_count, string price) : BaseIngredient(name, stoi(item_count), stod(price)) {
     this->type = type[0];
     unit = unit_of_types[this->type];
 }
-
-

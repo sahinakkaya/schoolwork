@@ -5,22 +5,23 @@
 
 #ifndef STOCK_H
 #define STOCK_H
-#include "ingredient.h"
 #include <fstream>
-#include <vector>
 #include <tuple>
+#include <vector>
+#include "ingredient.h"
 using namespace std;
 
-class Stock{
+class Stock {
     string header;
     map<string, Ingredient*> stock;
     bool has_enough_ingredient(string, int);
-    public:
-        Stock(ifstream&);
-        bool has_enough(tuple<string, int>, int);
-        void update(string, int);
-        double get_price(string, int);
-        void print(FILE* file = stdout);
-        void write_to_file(const char* filename="stock.txt");
+
+   public:
+    Stock(ifstream&);
+    bool has_enough(tuple<string, int>, int);
+    void update(string, int);
+    double get_price(string, int);
+    void print(FILE* file = stdout);
+    void write_to_file(const char* filename = "stock.txt");
 };
 #endif
