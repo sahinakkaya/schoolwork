@@ -4,6 +4,7 @@
 * Date: 09.05.2019 */
 
 #include "menu.h"
+#include "helper_functions.h"
 using namespace std;
 
 /*

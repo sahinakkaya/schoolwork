@@ -5,6 +5,7 @@
 
 #include "stock.h"
 #include "vector"
+#include "helper_functions.h"
 using namespace std;
 
 /*
@@ -47,14 +48,14 @@ bool Stock::has_enough_ingredient(string name, int amount){
 
 /*
  /brief check if stock has enough ingredient with given name and amount
- /param t a tuple that is consiting of string name and int amount respectively
- /param a an integer that is going to be multipled with amount
- /return true if item_count of "name" ingredient is greater than or equal to amount * a, false otherwise
+ /param req a requirement tuple that is consiting of requirement name and required amount respectively
+ /param number_of_orders an integer
+ /return true if item_count of requirement is sufficent, false otherwise
 */
-bool Stock::has_enough(tuple<string, int> t, int a){
-    string name = get<0>(t);
-    int amount = get<1>(t) * a;
-    return has_enough_ingredient(name, amount);
+bool Stock::has_enough(tuple<string, int> req, int number_of_orders){
+    string requirement_name = get<0>(req);
+    int required_amount = get<1>(req);
+    return has_enough_ingredient(requirement_name, required_amount * number_of_orders);
 }
 
 /*

@@ -6,6 +6,7 @@
 #include "stock.h"
 #include "menu.h"
 #include "order.h"
+#include "helper_functions.h"
 #include <algorithm>
 #include <functional>
 using namespace std;
@@ -46,27 +47,28 @@ void serve_to_tables(Stock& s, Menu& m, Order& o){
         cout << table_name << " ordered:" <<endl;
         for(auto const& order: orders){
             string order_name = get<0>(order);
-            int amount = get<1>(order);
+            int number_of_orders = get<1>(order);
             vector<tuple<string, int>> requirements = m.get_menu()[order_name];
 
-            auto requirement_satisfied = bind(&Stock::has_enough, &s, placeholders::_1, cref(amount));
+            auto requirement_satisfied = bind(&Stock::has_enough, &s, placeholders::_1, cref(number_of_orders));
             bool can_be_served = all_of(requirements.begin(), requirements.end(), requirement_satisfied);
 
             if (!can_be_served){
                 cout << "We don't have enough "<< order_name << endl;
             }
-            while(!all_of(requirements.begin(),requirements.end(), requirement_satisfied) && amount > 0){
-                amount -= 1;
+            while(!can_be_served && number_of_orders > 0){
+                number_of_orders -= 1;
+                can_be_served = all_of(requirements.begin(),requirements.end(), requirement_satisfied);
             }
-            if (amount > 0){
+            if (number_of_orders > 0){
                 cost = 0;
                 for(auto const& req: requirements){
-                    string name = get<0>(req);
-                    int quantity = get<1>(req);
-                    s.update(name, quantity*amount);
-                    cost += s.get_price(name, quantity*amount);
+                    string requirement_name = get<0>(req);
+                    int required_amount = get<1>(req);
+                    s.update(requirement_name, required_amount*number_of_orders);
+                    cost += s.get_price(requirement_name, required_amount*number_of_orders);
                 }
-                cout << amount<< " " << order_name <<" cost: "<< cost<<endl;
+                cout << number_of_orders<< " " << order_name <<" cost: "<< cost<<endl;
                 total_cost += cost;
             }
         }

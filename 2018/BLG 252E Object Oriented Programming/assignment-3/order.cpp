@@ -4,6 +4,7 @@
 * Date: 09.05.2019 */
 
 #include "order.h"
+#include "helper_functions.h"
 using namespace std;
 
 /*
@@ -20,15 +21,15 @@ Order::Order(ifstream& file){
         }
         string line;
         getline(file,line);
-        int number_of_orders = stoi(line);
+        int number_of_lines_to_read = stoi(line);
         vector<tuple<string, int>> orders;
-        while (number_of_orders--){
+        while (number_of_lines_to_read--){
             getline(file, line);
             vector<string> fields;
             split(line, " ",fields, -1);
-            int amount = stoi(fields[0]);
-            string name = join(" ", fields,1);
-            orders.push_back(make_tuple(name, amount));
+            string order_name = join(" ", fields,1);
+            int number_of_orders = stoi(fields[0]);
+            orders.push_back(make_tuple(order_name, number_of_orders));
         }
         tables.push_back(make_tuple(table_name, orders));
     }
@@ -40,11 +41,12 @@ void Order::print(){
     for(auto const& table: tables){
         string table_name = get<0>(table);
         vector<tuple<string, int>> orders = get<1>(table);
+        
         cout << table_name << endl;
         for(auto const& order: orders){
-            string name = get<0>(order);
-            int amount = get<1>(order);
-            cout << amount << " " << name << endl;
+            string order_name = get<0>(order);
+            int number_of_orders = get<1>(order);
+            cout << number_of_orders << " " << order_name << endl;
         }
     }
 }
