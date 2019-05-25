@@ -1,2 +1,2 @@
-# assignments
-Almost all of my coding assignments gathered together.  
+# schoolwork
+My assignments and school projects gathered together.  
