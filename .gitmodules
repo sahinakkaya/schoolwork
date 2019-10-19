@@ -16,3 +16,6 @@
 [submodule "2019/BLG 317E Database Systems/itucsdb1973"]
 	path = 2019/BLG 317E Database Systems/itucsdb1973
 	url = https://github.com/itucsdb1973/itucsdb1973.git
+[submodule "2019/BLG 411E Software Engineering/chessVshogi"]
+	path = 2019/BLG 411E Software Engineering/chessVshogi
+	url = https://github.com/ChessVShogi/chessVshogi.git
