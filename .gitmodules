@@ -19,3 +19,5 @@
 [submodule "2019/BLG 411E Software Engineering/chessVshogi"]
 	path = 2019/BLG 411E Software Engineering/chessVshogi
 	url = https://github.com/ChessVShogi/chessVshogi.git
+	ignore = untracked
+
