@@ -7,6 +7,7 @@
 #include <fstream>
 #include <assert.h>
 #include <vector>
+#include "sorting_algorithms.h"
 
 using namespace std;
 
@@ -75,9 +76,4 @@ int main(int argc, char *argv[])
         bubble_sort(numbers);
     else
         merge_sort(numbers);
-    
-
-    cout << endl << numbers[3] << endl;
-
-
 }
