@@ -8,7 +8,7 @@
 
 #include <vector>
 
-void bubble_sort(std::vector<int>& v);
-void merge_sort(std::vector<int>& v);
+void bubble_sort(std::vector<int>&);
+void merge_sort(std::vector<int>&);
 
 #endif
