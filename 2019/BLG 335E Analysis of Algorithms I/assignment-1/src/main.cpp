@@ -11,6 +11,16 @@
 
 using namespace std;
 
+void print(vector<int> &v)
+{
+    int size = (signed) v.size();
+    for (int i = 0; i < size; i++)
+    {
+        cout << v[i] << ", ";
+    }
+    cout << endl;
+}
+
 int main(int argc, char *argv[])
 {
     if (argc != 4)
@@ -68,12 +78,12 @@ int main(int argc, char *argv[])
     while (num_of_integers--)
     {
         file >> number;
-        cout << number << ", ";
         numbers.push_back(number);
     }
-
+    print(numbers);
     if (algorithm_type == 'b')
         bubble_sort(numbers);
     else
         merge_sort(numbers);
+    print(numbers);
 }
