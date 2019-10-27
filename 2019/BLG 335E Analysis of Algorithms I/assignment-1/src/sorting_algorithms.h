@@ -9,6 +9,7 @@
 #include <vector>
 
 void bubble_sort(std::vector<int>&);
-void merge_sort(std::vector<int>&);
+void merge_sort(std::vector<int>&, int, int);
+void merge(std::vector<int>&, int, int, int);
 
 #endif

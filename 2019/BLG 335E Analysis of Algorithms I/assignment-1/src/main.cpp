@@ -13,7 +13,7 @@ using namespace std;
 
 void print(vector<int> &v)
 {
-    int size = (signed) v.size();
+    int size = (signed)v.size();
     for (int i = 0; i < size; i++)
     {
         cout << v[i] << ", ";
@@ -84,6 +84,6 @@ int main(int argc, char *argv[])
     if (algorithm_type == 'b')
         bubble_sort(numbers);
     else
-        merge_sort(numbers);
+        merge_sort(numbers, 0, (int)numbers.size() - 1);
     print(numbers);
 }
