@@ -10,5 +10,18 @@ void merge_sort(vector<int>& v){
 };
 
 void bubble_sort(vector<int>& v){
-    cout << "bubble" << endl;
+    int i = v.size();
+    bool sorted = false;
+    while (i>1 && !sorted){
+        sorted = true;
+        for(int j = 1; j<i; j++){
+            if (v[j] < v[j-1]){
+                int temp = v[j-1];
+                v[j-1] = v[j];
+                v[j] = temp;
+                sorted = false;
+            }
+        }
+        i--;
+    }
 };
