@@ -1,3 +1,8 @@
+/* @Author
+* Student Name: Şahin Akkaya
+* Student ID : 150170098
+* Date: 27.10.2019 */
+
 #include "sorting_algorithms.h"
 
 #include <vector>
