@@ -5,20 +5,28 @@
 
 #include <iostream>
 #include <fstream>
-#include <assert.h>
 #include <vector>
+#include <time.h>
 #include "sorting_algorithms.h"
 
 using namespace std;
 
-void print(vector<int> &v)
+void print(vector<int> &v, bool write_to_file = true)
 {
+    
+    streambuf *coutbuf = cout.rdbuf();
+    ofstream output;
+    if (write_to_file)
+    {
+        output.open("output.txt");
+        coutbuf = cout.rdbuf(output.rdbuf());
+    }
     int size = (signed)v.size();
     for (int i = 0; i < size; i++)
     {
-        cout << v[i] << ", ";
+        cout << v[i] << endl;
     }
-    cout << endl;
+    cout.rdbuf(coutbuf);
 }
 
 int main(int argc, char *argv[])
