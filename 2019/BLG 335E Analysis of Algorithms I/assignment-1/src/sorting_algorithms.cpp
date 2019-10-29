@@ -48,8 +48,7 @@ void merge(vector<int> &a, int low, int mid, int high)
     }
     for (int h = low; h <= high; h++)
     {
-        a[h] = b.front();
-        b.erase(b.begin()); 
+        a[h] = b[h-low];
     }
 }
 
