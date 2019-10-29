@@ -88,7 +88,6 @@ int main(int argc, char *argv[])
         file >> number;
         numbers.push_back(number);
     }
-    print(numbers);
     clock_t t;
     t = clock();
     if (algorithm_type == 'b')
