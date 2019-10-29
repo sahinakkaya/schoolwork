@@ -13,7 +13,7 @@ using namespace std;
 
 void print(vector<int> &v, bool write_to_file = true)
 {
-    
+
     streambuf *coutbuf = cout.rdbuf();
     ofstream output;
     if (write_to_file)
@@ -89,9 +89,16 @@ int main(int argc, char *argv[])
         numbers.push_back(number);
     }
     print(numbers);
+    clock_t t;
+    t = clock();
     if (algorithm_type == 'b')
         bubble_sort(numbers);
     else
         merge_sort(numbers, 0, (int)numbers.size() - 1);
+    t = clock() - t;
+    cout << "It took " << ((float)t) / CLOCKS_PER_SEC << " seconds to sort "
+         << numbers.size() << " numbers with " 
+         << ((algorithm_type == 'b')?"bubble sort":"merge sort") << " algorithm." << endl;
+        
     print(numbers);
 }
