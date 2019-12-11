@@ -48,6 +48,20 @@ int main(int argc, char *argv[]){
         pq.push(e2);
     }
 
+    string name;
+    int time=0;
+    string type;
+    while (!pq.empty()) 
+    { 
+
+        Event e = pq.top();
+        name = e.get_event_name();
+        time = e.get_event_time();
+        type = e.get_event_type();
+        cout << "TIME " << time << ": " << name << " " << type << "ED" << endl; 
+        pq.pop(); 
+    }
+    cout << "TIME " << time << ": " << "NO MORE EVENTS, SCHEDULER EXITS" << endl;
     return EXIT_SUCCESS;
 
 }
