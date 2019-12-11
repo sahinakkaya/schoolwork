@@ -54,19 +54,27 @@ int main(int argc, char *argv[]){
     }
     Comparator::compare_behaviour = "greater";
     string name;
-    int time=0;
+    int event_time=0;
+    int clock = 1;
     string type;
     while (!pq.empty()) 
     { 
 
         Event e = pq.top();
         name = e.get_event_name();
-        time = e.get_event_time();
+        event_time = e.get_event_time();
         type = e.get_event_type();
-        cout << "TIME " << time << ": " << name << " " << type << "ED" << endl; 
-        pq.pop(); 
+        if (clock < event_time){
+            while (clock != event_time){
+                cout << "TIME " << clock << ": NO EVENT" << endl;
+                clock++;
+            }
+        }
+        cout << "TIME " << event_time << ": " << name << " " << type << "ED" << endl; 
+        pq.pop();
+        clock = event_time + 1; 
     }
-    cout << "TIME " << time << ": " << "NO MORE EVENTS, SCHEDULER EXITS" << endl;
+    cout << "TIME " << event_time << ": " << "NO MORE EVENTS, SCHEDULER EXITS" << endl;
     return EXIT_SUCCESS;
 
 }
