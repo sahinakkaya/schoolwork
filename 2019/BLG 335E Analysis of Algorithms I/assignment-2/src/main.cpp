@@ -10,13 +10,13 @@
 
 using namespace std;
 
-class Sorter 
+class Comparator 
 { 
     public:
-        static string sorting_behaviour;
+        static string compare_behaviour;
         bool operator()(const Event& e1, const Event& e2) 
         {
-            if (sorting_behaviour.compare("greater"))
+            if (compare_behaviour.compare("greater"))
                 return e1.get_event_time() > e2.get_event_time();
             else
                 return e1.get_event_time() >= e2.get_event_time();
@@ -24,7 +24,7 @@ class Sorter
 
 };
 
-string Sorter::sorting_behaviour = "greater-than";
+string Comparator::compare_behaviour = "greater-than";
 
 int main(int argc, char *argv[]){
     if (argc != 2)
@@ -45,14 +45,14 @@ int main(int argc, char *argv[]){
     string event_name;
     int start_time;
     int end_time;
-    priority_queue <Event, vector<Event>, Sorter > pq; 
+    priority_queue <Event, vector<Event>, Comparator > pq; 
     while(file >> event_name >> start_time >> end_time){
         Event e1 = Event(event_name, start_time, "START");
         Event e2 = Event(event_name, end_time, "END");
         pq.push(e1);
         pq.push(e2);
     }
-    Sorter::sorting_behaviour = "greater";
+    Comparator::compare_behaviour = "greater";
     string name;
     int time=0;
     string type;
