@@ -24,6 +24,13 @@ int main(int argc, char *argv[]){
         return EXIT_FAILURE;
     }
 
+    string event_name;
+    int start_time;
+    int end_time;
+    while(file >> event_name >> start_time >> end_time){
+        cout << event_name << " " << start_time << " " << end_time << endl;
+    }
+
     return EXIT_SUCCESS;
 
 }
