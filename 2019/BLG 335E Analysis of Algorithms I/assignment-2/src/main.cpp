@@ -45,22 +45,22 @@ int main(int argc, char *argv[]){
     string event_name;
     int start_time;
     int end_time;
-    priority_queue <Event, vector<Event>, Comparator > pq; 
+    priority_queue <Event, vector<Event>, Comparator > events_min_heap; 
     while(file >> event_name >> start_time >> end_time){
         Event e1 = Event(event_name, start_time, "START");
         Event e2 = Event(event_name, end_time, "END");
-        pq.push(e1);
-        pq.push(e2);
+        events_min_heap.push(e1);
+        events_min_heap.push(e2);
     }
     Comparator::compare_behaviour = "greater";
     string name;
     int event_time=0;
     int clock = 1;
     string type;
-    while (!pq.empty()) 
+    while (!events_min_heap.empty()) 
     { 
 
-        Event e = pq.top();
+        Event e = events_min_heap.top();
         name = e.get_event_name();
         event_time = e.get_event_time();
         type = e.get_event_type();
@@ -71,7 +71,7 @@ int main(int argc, char *argv[]){
             }
         }
         cout << "TIME " << event_time << ": " << name << " " << type << "ED" << endl; 
-        pq.pop();
+        events_min_heap.pop();
         clock = event_time + 1; 
     }
     cout << "TIME " << event_time << ": " << "NO MORE EVENTS, SCHEDULER EXITS" << endl;
