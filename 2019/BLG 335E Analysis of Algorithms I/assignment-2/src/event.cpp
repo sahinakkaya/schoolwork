@@ -26,3 +26,7 @@ int Event::get_event_time() const{
 string Event::get_event_type() const{
     return event_type;
 } 
+
+bool Event::operator>(Event e) const{
+    return event_time> e.get_event_time();
+}

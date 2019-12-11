@@ -21,5 +21,6 @@ class Event
         
         int get_event_time() const;
         string get_event_type() const;
+        bool operator>(Event) const;
 }; 
 #endif
