@@ -8,18 +8,23 @@
 #include <queue>
 #include "event.h"
 
+using namespace std;
 
 class Sorter 
 { 
     public:
+        static string sorting_behaviour;
         bool operator()(const Event& e1, const Event& e2) 
         {
-            return e1.get_event_time() > e2.get_event_time();
+            if (sorting_behaviour.compare("greater"))
+                return e1.get_event_time() > e2.get_event_time();
+            else
+                return e1.get_event_time() >= e2.get_event_time();
         } 
 
-}; 
+};
 
-using namespace std;
+string Sorter::sorting_behaviour = "greater-than";
 
 int main(int argc, char *argv[]){
     if (argc != 2)
@@ -47,7 +52,7 @@ int main(int argc, char *argv[]){
         pq.push(e1);
         pq.push(e2);
     }
-
+    Sorter::sorting_behaviour = "greater";
     string name;
     int time=0;
     string type;
