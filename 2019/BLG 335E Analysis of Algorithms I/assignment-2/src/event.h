@@ -17,9 +17,9 @@ class Event
         string event_type;
     public:
         Event(string , int, string);
-        string get_event_name();
+        string get_event_name() const;
         
-        int get_event_time();
-        string get_event_type();
+        int get_event_time() const;
+        string get_event_type() const;
 }; 
 #endif

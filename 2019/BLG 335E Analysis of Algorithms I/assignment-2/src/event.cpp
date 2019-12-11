@@ -14,15 +14,15 @@ Event::Event(string event_name, int event_time, string event_type)
 }
 
 
-string Event::get_event_name(){
+string Event::get_event_name() const{
     return event_name;
 } 
         
-int Event::get_event_time(){
+int Event::get_event_time() const{
     return event_time;
 }
 
 
-string Event::get_event_type(){
+string Event::get_event_type() const{
     return event_type;
 } 
