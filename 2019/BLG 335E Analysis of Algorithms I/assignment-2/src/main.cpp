@@ -5,9 +5,22 @@
 
 #include <iostream>
 #include <fstream>
+#include <queue>
+#include "event.h"
 
+
+class Sorter 
+{ 
+    public:
+        bool operator()(const Event& e1, const Event& e2) 
+        {
+            return e1.get_event_time() > e2.get_event_time();
+        } 
+
+}; 
 
 using namespace std;
+
 int main(int argc, char *argv[]){
     if (argc != 2)
     {
@@ -27,8 +40,12 @@ int main(int argc, char *argv[]){
     string event_name;
     int start_time;
     int end_time;
+    priority_queue <Event, vector<Event>, Sorter > pq; 
     while(file >> event_name >> start_time >> end_time){
-        cout << event_name << " " << start_time << " " << end_time << endl;
+        Event e1 = Event(event_name, start_time, "START");
+        Event e2 = Event(event_name, end_time, "END");
+        pq.push(e1);
+        pq.push(e2);
     }
 
     return EXIT_SUCCESS;
