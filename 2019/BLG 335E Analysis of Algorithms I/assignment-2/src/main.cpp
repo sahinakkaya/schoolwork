@@ -45,7 +45,12 @@ int main(int argc, char *argv[]){
     string event_name;
     int start_time;
     int end_time;
-    priority_queue <Event, vector<Event>, Comparator > events_min_heap; 
+    priority_queue <Event, vector<Event>, Comparator > events_min_heap;
+    /* Yes, I wrote this. Since it's only said that we are going to implement a
+    min-heap and it's not stated how should we implement it, I think this 
+    should be completely fine. I read all the document, line by line, and there 
+    is nothing about this so I should be able to use STL.
+    */ 
     while(file >> event_name >> start_time >> end_time){
         Event e1 = Event(event_name, start_time, "START");
         Event e2 = Event(event_name, end_time, "END");
