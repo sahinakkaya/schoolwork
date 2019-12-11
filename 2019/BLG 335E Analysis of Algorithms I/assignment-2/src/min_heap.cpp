@@ -1,3 +1,8 @@
+/* @Author
+* Student Name: Şahin Akkaya
+* Student ID : 150170098
+* Date: 12.12.2019 */
+
 #include "min_heap.h"
 
 int MinHeap::size(){
