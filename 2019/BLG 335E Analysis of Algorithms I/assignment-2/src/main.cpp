@@ -36,7 +36,7 @@ int main(int argc, char *argv[]){
         events_min_heap.insert(e1);
         events_min_heap.insert(e2);
     }
-    
+    file.close();
     events_min_heap.print_events();
     return EXIT_SUCCESS;
 
