@@ -63,7 +63,7 @@ int MinHeap::parent(int child_index){
 }
 
 void MinHeap::print_events(){
-    int event_time=0;
+    int event_time=1;
     int clock = 1;
     while (!heap.empty()) {
         Event e = extract_min();
