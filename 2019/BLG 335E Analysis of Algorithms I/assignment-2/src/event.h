@@ -9,18 +9,18 @@
 #include <iostream>
 
 using namespace std;
-class Event 
-{ 
-    private:
-        string event_name; 
-        int event_time;
-        string event_type;
-    public:
-        Event(string , int, string);
-        string get_event_name() const;
-        
-        int get_event_time() const;
-        string get_event_type() const;
-        bool operator>(Event) const;
-}; 
+class Event {
+   private:
+    string event_name;
+    int event_time;
+    string event_type;
+
+   public:
+    Event(string, int, string);
+    string get_event_name() const;
+
+    int get_event_time() const;
+    string get_event_type() const;
+    bool operator>(Event) const;
+};
 #endif
