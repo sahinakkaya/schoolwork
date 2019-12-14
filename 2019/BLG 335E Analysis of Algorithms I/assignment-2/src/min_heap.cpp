@@ -5,6 +5,17 @@
 
 #include "min_heap.h"
 
+/*
+ / I'm creating a binary tree and I'll use vector to store the elements
+ / instead of using pointers (left, right, parent etc.) If we index the 
+ / tree elements starting from root and visiting each level from left to
+ / right, we realize that we can find the index of left child of some node
+ / with index i as 2*i + 1, and right child is 2*i + 2 of course. We can
+ / similarly calculate the parent index from some node. With that said, I
+ / implemented the MinHeap class by looking at Binomial Heaps file from
+ / recitation session and writing the logic for the algorithms.
+*/
+
 int MinHeap::size() {
     return heap.size();
 }
@@ -25,32 +36,38 @@ Event MinHeap::extract_min() {
     return e;
 }
 
+/*
+ / As long as the node is not a leaf node and it is 
+ / bigger than it's children, we're swapping it with
+ / its smallest child.
+*/
 void MinHeap::bubble_down(int index) {
-    int left_child = left(index);
-    int right_child = right(index);
-    if (left_child >= 0 && right_child >= 0 && heap[left_child] > heap[right_child]) {
-        left_child = right_child;
+    int left_child_index = left(index);
+    int right_child_index = right(index);
+    int smallest_child_index = left_child_index;
+    if (left_child_index > 0 && right_child_index > 0 && heap[left_child_index] > heap[right_child_index]) {
+        smallest_child_index = right_child_index;
     }
-    if (left_child > 0 && heap[index] > heap[left_child]) {
+    if (smallest_child_index > 0 && heap[index] > heap[smallest_child_index]) {
         Event e = heap[index];
-        heap[index] = heap[left_child];
-        heap[left_child] = e;
-        bubble_down(left_child);
+        heap[index] = heap[smallest_child_index];
+        heap[smallest_child_index] = e;
+        bubble_down(smallest_child_index);
     }
 }
 
 int MinHeap::left(int parent_index) {
     int left = 2 * parent_index + 1;
-    if (left < size())
-        return left;
-    return -1;
+    if (left >= size())
+        return -1;
+    return left;
 }
 
 int MinHeap::right(int parent_index) {
     int right = 2 * parent_index + 2;
-    if (right < size())
-        return right;
-    return -1;
+    if (right >= size())
+        return -1;
+    return right;
 }
 
 int MinHeap::parent(int child_index) {
@@ -60,6 +77,14 @@ int MinHeap::parent(int child_index) {
     return parent;
 }
 
+/* 
+ / We are extracting the minimum element (root) and as long as
+ / the current time is smaller than its time, we are printing:
+ / TIME t: NO EVENT
+ / Then we are printing the event description and repeating this
+ / process until there are no events in the heap
+
+*/
 void MinHeap::print_events() {
     int event_time = 1;
     int clock = 1;
@@ -82,6 +107,10 @@ void MinHeap::print_events() {
          << "NO MORE EVENTS, SCHEDULER EXITS" << endl;
 }
 
+/*
+ / As long as the node is not a root node and it is smaller than
+ / its parent, we are swapping it with its parent
+*/
 void MinHeap::bubble_up(int index) {
     if (index >= 0 && parent(index) >= 0 && heap[parent(index)] > heap[index]) {
         Event temp = heap[index];
