@@ -45,8 +45,7 @@ HW3_Result hw3(int eastWarehousePackageCount, int eastWarehousePackageSizes[],
   vector<Package> packages;
   int turn = 0;
   while (!shipment_ended) {
-    cout << "------------- current ware house: " 
-         << (turn % 2 ? "west" : "east")
+    cout << "------------- current ware house: " << (turn % 2 ? "west" : "east")
          << " ------------" << endl;
     current_ware_house->print_tree();
     if (current_ware_house->get_node_count() >= smallest_ordinal) {
