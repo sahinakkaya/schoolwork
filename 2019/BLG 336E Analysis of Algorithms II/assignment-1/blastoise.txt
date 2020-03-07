@@ -1,0 +1,5 @@
+Attack,PP,Accuracy,Damage,FirstUsage
+Tackle,-10,100,30,0
+Water Gun,-20,100,40,0
+Bite,-25,100,60,0
+Skip,100,100,0,3
