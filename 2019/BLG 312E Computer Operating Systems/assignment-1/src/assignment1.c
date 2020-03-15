@@ -21,96 +21,41 @@ void print_info_about_process(int child_pids[], int num_of_childs, int level) {
 
 int main() {
   int level1_childs_pid[3] = {0};
-  int child = fork();
-  if (child == 0) {
-    // 2
+  for (int i = 0; i < 3; i++) {
+    int child = fork();
     int level2_childs_pid[2] = {0};
-    child = fork();
     if (child == 0) {
-      // 3
-      child = fork();
-      if (child == 0) {
-        // 4
-      } else {
-        // 3
-      }
-      // 3,4
-    } else {
-      level2_childs_pid[0] = child;
       // 2
       child = fork();
       if (child == 0) {
-        // 5
-      } else {
-        level2_childs_pid[1] = child;
-        print_info_about_process(level2_childs_pid, 2, 2);
-      }
-      // 2, 5
-    }
-    // 2, 3, 4, 5
-  } else {
-    level1_childs_pid[0] = child;
-    child = fork();
-    if (child == 0) {
-      // 6
-      int level2_childs_pid[2] = {0};
-      child = fork();
-      if (child == 0) {
-        // 7
+        // 3
         child = fork();
         if (child == 0) {
-          // 8
+          // 4
+          print_info_about_process(level1_childs_pid, 0, 4);
         } else {
-          // 7
+          int level3_childs_pid[1] = {child};
+          print_info_about_process(level3_childs_pid, 1, 3);
         }
-        // 7
+        // 3,4
       } else {
-        // 6
         level2_childs_pid[0] = child;
+        // 2
         child = fork();
         if (child == 0) {
-          // 9
+          // 5
+          print_info_about_process(level1_childs_pid, 0, 4);
         } else {
-          // 6
           level2_childs_pid[1] = child;
           print_info_about_process(level2_childs_pid, 2, 2);
         }
-        // 6
+        // 2, 5
       }
-
+      // 2, 3, 4, 5
+      break;
     } else {
-      // 1
-      level1_childs_pid[1] = child;
-      child = fork();
-      if (child == 0) {
-        // 10
-        int level2_childs_pid[2] = {0};
-        child = fork();
-        if (child == 0) {
-          // 11
-          child = fork();
-          if (child == 0) {
-            // 12
-          }
-          // 11, 12
-        } else {
-          // 10
-          level2_childs_pid[0] = child;
-          child = fork();
-          if (child == 0) {
-            // 13
-          } else {
-            level2_childs_pid[1] = child;
-            print_info_about_process(level2_childs_pid, 2, 2);
-          }
-          // 10 ,13
-        }
-        // 10, 11, 12, 13
-      } else {
-        level1_childs_pid[2] = child;
-        print_info_about_process(level1_childs_pid, 3, 1);
-      }
-      // 1, 10, 11, 12, 13
+      level1_childs_pid[i] = child;
+      if (i == 2) print_info_about_process(level1_childs_pid, 3, 1);
     }
   }
 
