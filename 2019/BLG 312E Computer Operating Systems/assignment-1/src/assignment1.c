@@ -44,7 +44,7 @@ int main() {
         child = fork();
         if (child == 0) {
           // 5
-          print_info_about_process(level1_childs_pid, 0, 4);
+          print_info_about_process(level1_childs_pid, 0, 3);
         } else {
           level2_childs_pid[1] = child;
           print_info_about_process(level2_childs_pid, 2, 2);
