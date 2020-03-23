@@ -116,13 +116,11 @@ class Node:
         self.is_leaf = is_leaf
         self.children = []
 
-    def create_children(self):
+    def create_children(self, verbose=True):
         """Creates children and calls itself recursively on children"""
         if self.level >= Node.MAX_LEVEL:
-            pikachu_index = 0 if self.pokemons[0].is_pikachu else 1
-            blastoise_index = (pikachu_index + 1) % 2
-            print(self.pokemons[pikachu_index], self.pokemons[blastoise_index],
-                  f"PROB:{self.probability:.3f}", sep=" ")
+            if verbose:
+                print(self)
             return
         children = []
         if self.attacker.health_points > 0:
@@ -148,26 +146,75 @@ class Node:
             self.is_leaf = False
             self.children.extend(children)
             for child in children:
-                child.create_children()
+                child.create_children(verbose)
+
+    @staticmethod
+    def breadth_first_search(root_node):
+        if root_node is None:
+            return 0
+        node_count = 0
+        queue = [root_node]
+        while len(queue) > 0:
+            node_count += 1
+            node = queue.pop(0)
+            # print(node)
+            queue.extend(node.children)
+
+        return node_count
+
+    @staticmethod
+    def depth_first_search(root_node):
+        if root_node is None:
+            return 0
+        node_count = 0
+        stack = [root_node]
+        while len(stack) > 0:
+            node_count += 1
+            node = stack.pop()
+            # print(node)
+            stack.extend(reversed(node.children))
+        return node_count
+
+    def __str__(self):
+        pikachu_index = 0 if self.pokemons[0].is_pikachu else 1
+        blastoise_index = (pikachu_index + 1) % 2
+        return " ".join(map(str, (self.pokemons[pikachu_index],
+                                  self.pokemons[blastoise_index],
+                                  f"PROB:{self.probability:.3f}")))
 
 
 def main():
     import sys
+    import time
+    start = time.perf_counter()
+    pikachu = Pokemon("pikachu", 273, 100)
+    blastoise = Pokemon("blastoise", 361, 100)
+    # a = pikachu.copy()
+    # print(a == pikachu)
+    # print(a.__dict__)
+    # print(pikachu.__dict__)
+    # print(a.get_attacks(3))
+    # print(*pikachu.get_attacks(3), sep="\n")
+    # print(*blastoise.get_attacks(0), sep="\n")
+    n = Node((pikachu, blastoise), 1.0, 0)
+    Node.MAX_LEVEL = int(sys.argv[2])
+    # Node.MAX_LEVEL = 3
     if sys.argv[1] == "part1":
-        pikachu = Pokemon("pikachu", 273, 100)
-        blastoise = Pokemon("blastoise", 361, 100)
-        # a = pikachu.copy()
-        # print(a == pikachu)
-        # print(a.__dict__)
-        # print(pikachu.__dict__)
-        # print(a.get_attacks(3))
-        # print(*pikachu.get_attacks(3), sep="\n")
-        # print(*blastoise.get_attacks(0), sep="\n")
-        n = Node((pikachu, blastoise), 1.0, 0)
-        # Node.MAX_LEVEL = int(sys.argv[2])
-        Node.MAX_LEVEL = 2
         n.create_children()
         # print(n)
+    elif sys.argv[1] == "part2":
+        n.create_children(verbose=False)
+
+        if sys.argv[3] == "bfs":
+            node_count = Node.breadth_first_search(n)
+        elif sys.argv[3] == "dfs":
+            node_count = Node.depth_first_search(n)
+        else:
+            raise Exception
+
+        print(f"node count is: {node_count}")
+    total = time.perf_counter() - start
+    print(f"Took {total:.2f} seconds to execute")
 
 
 if __name__ == '__main__':
