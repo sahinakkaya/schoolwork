@@ -90,9 +90,14 @@ class Pokemon:
         name = "pikachu" if self.is_pikachu else "blastoise"
         return f"Pokemon('{name}', {self.health_points}, {self.power_points})"
 
+    def __str__(self):
+        i = "P" if self.is_pikachu else "B"
+        return f"{i}_HP:{self.health_points} {i}_PP:{self.power_points}"
+
 
 class Node:
     """A class to represent a state in the game"""
+    MAX_LEVEL = -1
 
     def __init__(self, pokemons: Tuple[Pokemon, Pokemon],
                  probability: float, level: int, is_leaf: bool = True):
@@ -109,12 +114,19 @@ class Node:
         self.probability = probability
         self.level = level
         self.is_leaf = is_leaf
-        self.children = None
+        self.children = []
 
     def create_children(self):
+        """Creates children and calls itself recursively on children"""
+        if self.level >= Node.MAX_LEVEL:
+            pikachu_index = 0 if self.pokemons[0].is_pikachu else 1
+            blastoise_index = (pikachu_index + 1) % 2
+            print(self.pokemons[pikachu_index], self.pokemons[blastoise_index],
+                  f"PROB:{self.probability:.3f}", sep=" ")
+            return
         children = []
         if self.attacker.health_points > 0:
-            possible_attacks = self.get_attacks()
+            possible_attacks = self.attacker.get_attacks(self.level)
             num_attacks = len(possible_attacks)
             for attack in possible_attacks:
                 attacker, defender = self.attacker.copy(), self.defender.copy()
@@ -134,26 +146,28 @@ class Node:
 
         if len(children) > 0:
             self.is_leaf = False
-
-        return children
-
-    def get_attacks(self):
-        return self.pokemons[self.level % 2 == 1].get_attacks(self.level)
-
+            self.children.extend(children)
+            for child in children:
+                child.create_children()
 
 
 def main():
-    pikachu = Pokemon("pikachu", 273, 100)
-    blastoise = Pokemon("blastoise", 361, 100)
-    a = pikachu.copy()
-    print(a == pikachu)
-    print(a.__dict__)
-    print(pikachu.__dict__)
-    print(a.get_attacks(3))
-    # print(*pikachu.get_attacks(3), sep="\n")
-    # print(*blastoise.get_attacks(0), sep="\n")
-    n = Node((pikachu, blastoise), 1, 0)
-    n.children = n.create_children()
+    import sys
+    if sys.argv[1] == "part1":
+        pikachu = Pokemon("pikachu", 273, 100)
+        blastoise = Pokemon("blastoise", 361, 100)
+        # a = pikachu.copy()
+        # print(a == pikachu)
+        # print(a.__dict__)
+        # print(pikachu.__dict__)
+        # print(a.get_attacks(3))
+        # print(*pikachu.get_attacks(3), sep="\n")
+        # print(*blastoise.get_attacks(0), sep="\n")
+        n = Node((pikachu, blastoise), 1.0, 0)
+        # Node.MAX_LEVEL = int(sys.argv[2])
+        Node.MAX_LEVEL = 2
+        n.create_children()
+        # print(n)
 
 
 if __name__ == '__main__':
