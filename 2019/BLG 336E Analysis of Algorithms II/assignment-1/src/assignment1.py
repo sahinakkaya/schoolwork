@@ -1,12 +1,12 @@
 # /usr/bin/python3.8
-from typing import List, Set, Dict, Tuple, Optional
+from typing import List, Tuple, Optional
 
 
 class Attack:
     """A class to represent an attack"""
 
     def __init__(self, name: str, cost: str,
-                 accuracy: str, damage: str, first_usage: str):
+                 accuracy: str, damage: str, first_usage: str) -> None:
         """
         :param name: name of the attack
         :param cost: the integer that will be decreased from attacker's pp
@@ -31,7 +31,7 @@ class Pokemon:
     """A class to represent pokemons"""
     ATTACKS = {"pikachu": [], "blastoise": []}
 
-    def __init__(self, name: str, health_points: int, power_points: int):
+    def __init__(self, name: str, health_points: int, power_points: int) -> None:
         """
         :param name: name of the pokemon, either 'pikachu' or 'blastoise'
         :param health_points: the integer that holds the initial HP of pokemon
@@ -61,7 +61,7 @@ class Pokemon:
         name = "pikachu" if self.is_pikachu else "blastoise"
         return self.ATTACKS[name]
 
-    def get_attacks(self, level: int):
+    def get_attacks(self, level: int) -> List[Attack]:
         """
         Takes an integer, level, and returns possible attacks for
         that level
@@ -69,13 +69,13 @@ class Pokemon:
         return [attack for attack in self.__attacks
                 if attack.first_usage <= level and attack.cost <= self.power_points]
 
-    def copy(self):
+    def copy(self) -> 'Pokemon':
         d = self.__dict__.copy()
         d["name"] = "pikachu" if self.is_pikachu else "blastoise"
         d.pop("is_pikachu")
         return Pokemon(**d)
 
-    def attack(self, opponent: 'Pokemon', attack: Attack, effective: bool):
+    def attack(self, opponent: 'Pokemon', attack: Attack, effective: bool) -> None:
         """
         Attacks to the opponent with specified attack and do damage
         if effective is True
@@ -100,7 +100,8 @@ class Node:
     MAX_LEVEL = -1
 
     def __init__(self, pokemons: Tuple[Pokemon, Pokemon],
-                 probability: float, level: int, is_leaf: bool = True):
+                 probability: float, level: int,
+                 is_leaf: Optional[bool] = True) -> None:
         """
         :param pokemons: a pair of Pokemon instances where the next attacker comes
                         first
@@ -116,7 +117,7 @@ class Node:
         self.is_leaf = is_leaf
         self.children = []
 
-    def create_children(self, verbose=True):
+    def create_children(self, verbose: Optional[bool] = True) -> None:
         """Creates children and calls itself recursively on children"""
         if self.level >= Node.MAX_LEVEL:
             if verbose:
@@ -149,7 +150,8 @@ class Node:
                 child.create_children(verbose)
 
     @staticmethod
-    def breadth_first_search(root_node, verbose=False):
+    def breadth_first_search(root_node: 'Node',
+                             verbose: Optional[bool] = False) -> int:
         """
         Performs a level order traversal on tree that has root 'root_node' and
         returns number of nodes
@@ -168,7 +170,8 @@ class Node:
         return node_count
 
     @staticmethod
-    def depth_first_search(root_node, verbose=False):
+    def depth_first_search(root_node: 'Node',
+                           verbose: Optional[bool] = False) -> int:
         """
         Performs pre order traversal on tree that has root 'root_node' and
         returns number of nodes
@@ -209,16 +212,15 @@ def main():
     n = Node((pikachu, blastoise), 1.0, 0)
     Node.MAX_LEVEL = int(sys.argv[2])
     # Node.MAX_LEVEL = 3
+    verbose = sys.argv[-1] == "v"
     if sys.argv[1] == "part1":
-        n.create_children()
-        # print(n)
+        n.create_children(verbose)
     elif sys.argv[1] == "part2":
         n.create_children(verbose=False)
-
         if sys.argv[3] == "bfs":
-            node_count = Node.breadth_first_search(n)
+            node_count = Node.breadth_first_search(n, verbose)
         elif sys.argv[3] == "dfs":
-            node_count = Node.depth_first_search(n)
+            node_count = Node.depth_first_search(n, verbose)
         else:
             raise Exception
 
