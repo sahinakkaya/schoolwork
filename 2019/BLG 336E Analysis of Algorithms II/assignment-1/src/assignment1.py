@@ -226,7 +226,7 @@ def main():
         else:
             raise Exception
 
-        print(f"node count is: {node_count}")
+        print(f"node count is: {node_count:,}")
     total = time.perf_counter() - start
     print(f"Took {total:.2f} seconds to execute")
 
