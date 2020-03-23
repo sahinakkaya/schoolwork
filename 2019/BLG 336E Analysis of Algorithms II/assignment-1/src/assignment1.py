@@ -149,7 +149,11 @@ class Node:
                 child.create_children(verbose)
 
     @staticmethod
-    def breadth_first_search(root_node):
+    def breadth_first_search(root_node, verbose=False):
+        """
+        Performs a level order traversal on tree that has root 'root_node' and
+        returns number of nodes
+        """
         if root_node is None:
             return 0
         node_count = 0
@@ -157,13 +161,18 @@ class Node:
         while len(queue) > 0:
             node_count += 1
             node = queue.pop(0)
-            # print(node)
+            if verbose:
+                print(node)
             queue.extend(node.children)
 
         return node_count
 
     @staticmethod
-    def depth_first_search(root_node):
+    def depth_first_search(root_node, verbose=False):
+        """
+        Performs pre order traversal on tree that has root 'root_node' and
+        returns number of nodes
+        """
         if root_node is None:
             return 0
         node_count = 0
@@ -171,7 +180,8 @@ class Node:
         while len(stack) > 0:
             node_count += 1
             node = stack.pop()
-            # print(node)
+            if verbose:
+                print(node)
             stack.extend(reversed(node.children))
         return node_count
 
