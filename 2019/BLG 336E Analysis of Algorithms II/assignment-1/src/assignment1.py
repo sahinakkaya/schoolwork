@@ -38,6 +38,8 @@ class Pokemon:
         self.health_points = health_points
         self.power_points = power_points
         self.is_pikachu = name == "pikachu"
+        assert name in ("pikachu", "blastoise"), \
+            "name of the pokemon should be 'pikachu' or 'blastoise'"
         if not self.ATTACKS[name]:
             self.ATTACKS[name].extend(self.__read_attacks_file(name))
 
