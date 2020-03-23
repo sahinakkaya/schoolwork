@@ -2,7 +2,18 @@
 
 
 class Attack:
-    def __init__(self, name, cost, accuracy, damage, first_usage):
+    """A class to represent an attack"""
+
+    def __init__(self, name: str, cost: str,
+                 accuracy: str, damage: str, first_usage: str):
+        """
+        :param name: name of the attack
+        :param cost: the integer that will be decreased from attacker's pp
+        :param accuracy: the probability that the attack will succeed
+        :param damage: the integer that will be decreased from defender's hp
+                       if the attack is succeeded
+        :param first_usage: the first round where the attack may be used
+        """
         self.name = name
         self.cost = int(cost)
         self.accuracy = int(accuracy)
@@ -15,37 +26,63 @@ class Attack:
 
 
 class Pokemon:
+    """A class to represent pokemons"""
     ATTACKS = {"pikachu": [], "blastoise": []}
 
-    def __init__(self, name, health_points, power_points):
+    def __init__(self, name: str, health_points: int, power_points: int):
+        """
+        :param name: name of the pokemon, either 'pikachu' or 'blastoise'
+        :param health_points: the integer that holds the initial HP of pokemon
+        :param power_points: the integer that holds the initial PP of pokemon
+        """
         self.health_points = health_points
         self.power_points = power_points
         self.is_pikachu = name == "pikachu"
         if not self.ATTACKS[name]:
-            self.ATTACKS[name].extend(self.read_attacks_file(name))
+            self.ATTACKS[name].extend(self.__read_attacks_file(name))
 
     @staticmethod
-    def read_attacks_file(name):
-        attacks = []
+    def __read_attacks_file(name):
+        """
+        Reads attacks file for pokemon specified by name and returns
+        list of attacks that the pokemon can do
+        """
         with open(name + ".txt") as f:
             f.readline()
-            for line in f.readlines():
-                attacks.append(Attack(*line.split(",")))
-        return attacks
+            return [Attack(*line.split(",")) for line in f.readlines()]
 
     @property
     def __attacks(self):
+        """Returns list of all attacks that the pokemon can do"""
         name = "pikachu" if self.is_pikachu else "blastoise"
         return self.ATTACKS[name]
 
-    def get_attacks(self, level):
+    def get_attacks(self, level: int):
+        """
+        Takes an integer, level, and returns possible attacks for
+        that level
+        """
         return [attack for attack in self.__attacks
                 if attack.first_usage <= level]
 
 
 class Node:
-    def __init__(self, pikachu, blastoise, turn,
-                 probability, level, is_leaf=True):
+    """A class to represent a state in the game"""
+
+    def __init__(self, pikachu: Pokemon, blastoise: Pokemon, turn: str,
+                 probability: float, level: int, is_leaf: bool = True):
+        """
+
+        :param pikachu: a Pokemon instance that holds the values for pikachu
+                        in this state
+        :param blastoise: a Pokemon instance that holds the values for
+                        blastoise in this state
+        :param turn: the initial of the pokemon who will play next
+        :param probability: the probability of encountering this state in the
+                            game
+        :param level: an integer that shows the level of this state
+        :param is_leaf: a boolean that tells if this state is end of game
+        """
         self.pokemons = {"p": pikachu, "b": blastoise}
         self.turn = turn
         self.probability = probability
