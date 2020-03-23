@@ -1,4 +1,5 @@
 # /usr/bin/python3.8
+from typing import List, Set, Dict, Tuple, Optional
 
 
 class Attack:
@@ -9,14 +10,15 @@ class Attack:
         """
         :param name: name of the attack
         :param cost: the integer that will be decreased from attacker's pp
-        :param accuracy: the probability that the attack will succeed
+        :param accuracy: the probability that the attack will succeed (0-100)
         :param damage: the integer that will be decreased from defender's hp
                        if the attack is succeeded
         :param first_usage: the first round where the attack may be used
         """
         self.name = name
-        self.cost = int(cost)
-        self.accuracy = int(accuracy)
+        self.cost = -int(cost)
+        self.accuracy = int(accuracy) / 100
+        self.inaccuracy = 1 - self.accuracy
         self.damage = int(damage)
         self.first_usage = int(first_usage)
 
@@ -65,40 +67,93 @@ class Pokemon:
         that level
         """
         return [attack for attack in self.__attacks
-                if attack.first_usage <= level]
+                if attack.first_usage <= level and attack.cost <= self.power_points]
+
+    def copy(self):
+        d = self.__dict__.copy()
+        d["name"] = "pikachu" if self.is_pikachu else "blastoise"
+        d.pop("is_pikachu")
+        return Pokemon(**d)
+
+    def attack(self, opponent: 'Pokemon', attack: Attack, effective: bool):
+        """
+        Attacks to the opponent with specified attack and do damage
+        if effective is True
+        """
+        self.power_points -= attack.cost
+        if effective:
+            opponent.health_points -= attack.damage
+            if opponent.health_points < 0:
+                opponent.health_points = 0
+
+    def __repr__(self):
+        name = "pikachu" if self.is_pikachu else "blastoise"
+        return f"Pokemon('{name}', {self.health_points}, {self.power_points})"
 
 
 class Node:
     """A class to represent a state in the game"""
 
-    def __init__(self, pikachu: Pokemon, blastoise: Pokemon, turn: str,
+    def __init__(self, pokemons: Tuple[Pokemon, Pokemon],
                  probability: float, level: int, is_leaf: bool = True):
         """
-
-        :param pikachu: a Pokemon instance that holds the values for pikachu
-                        in this state
-        :param blastoise: a Pokemon instance that holds the values for
-                        blastoise in this state
-        :param turn: the initial of the pokemon who will play next
+        :param pokemons: a pair of Pokemon instances where the next attacker comes
+                        first
         :param probability: the probability of encountering this state in the
                             game
         :param level: an integer that shows the level of this state
         :param is_leaf: a boolean that tells if this state is end of game
         """
-        self.pokemons = {"p": pikachu, "b": blastoise}
-        self.turn = turn
+        self.pokemons = pokemons
+        self.attacker, self.defender = pokemons
         self.probability = probability
         self.level = level
         self.is_leaf = is_leaf
         self.children = None
 
+    def create_children(self):
+        children = []
+        if self.attacker.health_points > 0:
+            possible_attacks = self.get_attacks()
+            num_attacks = len(possible_attacks)
+            for attack in possible_attacks:
+                attacker, defender = self.attacker.copy(), self.defender.copy()
+                # Effective
+                attacker.attack(defender, attack, effective=True)
+                probability = self.probability / num_attacks * attack.accuracy
+                node = Node((defender, attacker), probability, self.level + 1)
+                children.append(node)
+
+                if attack.accuracy != 1:
+                    # Not effective
+                    attacker, defender = self.attacker.copy(), self.defender.copy()
+                    attacker.attack(defender, attack, effective=False)
+                    probability = self.probability / num_attacks * attack.inaccuracy
+                    node = Node((defender, attacker), probability, self.level + 1)
+                    children.append(node)
+
+        if len(children) > 0:
+            self.is_leaf = False
+
+        return children
+
+    def get_attacks(self):
+        return self.pokemons[self.level % 2 == 1].get_attacks(self.level)
+
+
 
 def main():
     pikachu = Pokemon("pikachu", 273, 100)
     blastoise = Pokemon("blastoise", 361, 100)
-
-    print(*pikachu.get_attacks(3), sep="\n")
-    print(*blastoise.get_attacks(0), sep="\n")
+    a = pikachu.copy()
+    print(a == pikachu)
+    print(a.__dict__)
+    print(pikachu.__dict__)
+    print(a.get_attacks(3))
+    # print(*pikachu.get_attacks(3), sep="\n")
+    # print(*blastoise.get_attacks(0), sep="\n")
+    n = Node((pikachu, blastoise), 1, 0)
+    n.children = n.create_children()
 
 
 if __name__ == '__main__':
