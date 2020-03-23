@@ -1,5 +1,6 @@
 # /usr/bin/python3.8
 from typing import List, Tuple, Optional
+from collections import deque
 
 
 class Attack:
@@ -159,10 +160,11 @@ class Node:
         if root_node is None:
             return 0
         node_count = 0
-        queue = [root_node]
+        queue = deque((root_node,))
+
         while len(queue) > 0:
             node_count += 1
-            node = queue.pop(0)
+            node = queue.popleft()
             if verbose:
                 print(node)
             queue.extend(node.children)
