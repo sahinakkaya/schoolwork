@@ -17,9 +17,23 @@ int main(int argc, char**argv){
     tree.create_root(&n);
     int max_level;
     string part = argv[1];
+    string last_arg = argv[argc-1];
+    bool verbose = last_arg == "v";
+    int node_count=0;
     if (part == "part1"){
         max_level = stoi(argv[2]);
         tree.create_levels_until(max_level);
+    }else if(part =="part2"){
+        max_level = stoi(argv[2]);
+        tree.create_levels_until(max_level, "", false);
+        string t = argv[3];
+        if (t == "bfs")
+            node_count = tree.breadth_first_traversal(verbose);
+        else if (t == "dfs")
+            node_count = 0;
+        else
+            throw "enter dfs or bfs";
+        cout << "node count is: " << node_count <<endl;
     }
     //Pokemon p = pikachu.copy();
     //p.health_points = 0;

@@ -22,6 +22,10 @@ string Node::repr(){
     return f + " " + s + prob;
 }
 
+void Node::print(){
+    cout << repr() <<endl;
+}
+
 //     def __str__(self):
 //         pikachu_index = 0 if self.pokemons[0].is_pikachu else 1
 //         blastoise_index = (pikachu_index + 1) % 2

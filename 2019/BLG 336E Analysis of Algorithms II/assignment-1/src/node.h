@@ -18,6 +18,7 @@ class Node{
         vector<Node*> children;
         Node(pair<Pokemon*, Pokemon*>, double, int, Node*, string="som", bool=true, bool=true);
         string repr();
+        void print();
 };
 #endif
 // class Node:
