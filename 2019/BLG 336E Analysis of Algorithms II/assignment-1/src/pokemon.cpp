@@ -1,19 +1,40 @@
 #include "pokemon.h"
+#include <fstream>
+#include <sstream>
 
-map<string, vector<Attack>> Pokemon::ATTACKS = {{"pikachu", {
-                                                              {"Thundershock", "-10", "100", "40", "0"}, 
-                                                              {"Skull Bash", "-15", "70", "50", "0"},
-                                                              {"Slam", "-20", "80", "60", "0"}, 
-                                                              {"Skip", "100", "100", "0", "3"}
-                                                            }
-                                                },
-                                                {"blastoise",{
-                                                              {"Tackle", "-10", "100", "30", "0"}, 
-                                                              {"Water Gun", "-20", "100", "40", "0"},
-                                                              {"Bite", "-25", "100", "60", "0"},
-                                                              {"Skip", "100", "100", "0", "3"}
-                                                             }
-                                                }};
+map<string, vector<Attack>> Pokemon::ATTACKS = {{"pikachu", {}},
+                                                {"blastoise",{}}};
+
+vector<Attack> Pokemon::read_attacks_file(string name){
+    string filename = name + ".txt";
+    ifstream file(filename);
+    if (file.fail())
+    { // If cannot opened,
+        cerr << "Cannot open file '" << filename << "'. No such file." << endl;
+        throw "file not found";
+    }
+    string line; 
+    getline(file, line);
+    vector<Attack> attacks;
+    for(; getline(file, line);)
+    {
+        stringstream ss(line);
+        vector<string> result;
+        while(ss.good()){
+            string substr;
+            getline(ss, substr, ',');
+            result.push_back(substr);
+        }
+        string attack_name = result[0];
+        string cost = result[1];
+        string accuracy = result[2];
+        string damage=result[3];
+        string first_usage=result[4];
+        attacks.push_back(Attack(attack_name, cost, accuracy, damage, first_usage));
+    }  
+    return attacks;
+}
+
 string Pokemon::name(){
     return this->is_pikachu? "pikachu" : "blastoise";
 }
@@ -37,6 +58,11 @@ Pokemon::Pokemon(string name, int health_points, int power_points){
     this->is_pikachu = name == "pikachu";
     if (name != "pikachu" && name!= "blastoise")
         throw "name of the pokemon should be 'pikachu' or 'blastoise'";
+    if (ATTACKS[name].empty()){
+        vector<Attack> attacks = read_attacks_file(name); 
+        ATTACKS[name] = attacks;
+    }
+    this->read_attacks_file(name);
 }
 
 /* 

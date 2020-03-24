@@ -7,6 +7,7 @@
 using namespace std;
 class Pokemon{
         vector<Attack>& attacks();
+        vector<Attack> read_attacks_file(string);
     public:
         static map<string, vector<Attack>> ATTACKS;
         int health_points;
