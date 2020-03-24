@@ -26,6 +26,11 @@ string Pokemon::repr(){
 }
 
 Pokemon::Pokemon(){}
+/*
+:param name: name of the pokemon, either 'pikachu' or 'blastoise'
+:param health_points: the integer that holds the initial HP of pokemon
+:param power_points: the integer that holds the initial PP of pokemon
+*/
 Pokemon::Pokemon(string name, int health_points, int power_points){
     this->health_points = health_points;
     this->power_points = power_points;

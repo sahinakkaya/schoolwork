@@ -10,6 +10,10 @@ Tree::Tree(){
 void Tree::create_root(Node* node){
     root = node;
 }
+/*
+ *Creates levels until number of levels reaches max_level OR
+ *winner wins the game
+*/
 void Tree::create_levels_until(int max_level, string winner, bool verbose){
     deque<Node*> leaves;
     Node* node = root;
@@ -23,26 +27,15 @@ void Tree::create_levels_until(int max_level, string winner, bool verbose){
             int num_attacks = possible_attacks.size();
             for (auto attack :possible_attacks){
                 bool effective = true;
-                // cout << "an attack begins----------------"<<endl;
-                // cout << "name: "<<attack.name<< " damage: " <<attack.damage << " pp: "<<attack.cost<<endl;
-                // cout << node->attacker->repr()<< endl;
                 Pokemon* attacker = new Pokemon(*node->attacker);
-                // cout << attacker->repr()<<endl;
                 Pokemon* defender = new Pokemon(*node->defender);
-                // Effective
                 attacker->attack(*defender, attack, effective);
-                // cout << node->attacker->repr()<< endl;
-
-                // cout << attacker->repr()<<endl;
-                // cout << "-------------------an attack ends"<<endl;
 
                 double probability = node->probability / num_attacks * attack.accuracy;
                 Node* n = new Node(make_pair(defender, attacker), probability, node->level + 1, node,
                                 attack.name, effective);
-                if (verbose && n->level == max_level){
-                    // cout << "effective ";    
+                if (verbose && n->level == max_level)
                     n->print();
-                }
                 if (defender->health_points == 0 and attacker->is_pikachu == winner_is_pikachu)
                     if (winner == "pikachu" || winner == "blastoise")
                         end_flag = true;
@@ -51,15 +44,12 @@ void Tree::create_levels_until(int max_level, string winner, bool verbose){
                         effective = false;
                         Pokemon* attacker = new Pokemon(*node->attacker);
                         Pokemon* defender = new Pokemon(*node->defender);
-                        // Non Effective
                         attacker->attack(*defender, attack, effective);
                         double probability = node->probability / num_attacks * attack.inaccuracy;
                         Node* n = new Node(make_pair(defender, attacker), probability, node->level + 1, node,
                                 attack.name, effective);
-                        if (verbose && n->level == max_level){
-                            // cout << "non effective ";
+                        if (verbose && n->level == max_level)
                             n->print();
-                        }
                         children.push_back(n);
                 }
             }
@@ -82,7 +72,10 @@ void Tree::create_levels_until(int max_level, string winner, bool verbose){
         root->print();
     }
 }  
-
+/*
+ *Performs a level order traversal on tree that has root 'root_node' and
+ *returns number of nodes
+*/
 int Tree::breadth_first_traversal(bool verbose){
     if(root == nullptr)
         return 0;
@@ -129,7 +122,10 @@ Node* Tree::breadth_first_search(string winner){
     }
     return nullptr;
 }
-
+/*
+*Performs pre order traversal on tree that has root 'root_node' and
+*returns number of nodes
+*/
 int Tree::depth_first_traversal(bool verbose){
     if (root ==nullptr)
         return 0;
@@ -171,7 +167,7 @@ void Tree::print_path_for_node(Node* node){
             pikachu_hp = node->defender->health_points;
             blastoise_hp = node->attacker->health_points;
         }
-         attack_name = node->attack_name;
+        attack_name = node->attack_name;
         string is_effective = node->is_effective? "Effective":"Noneffective";
 
         cout << prev_attacker << " used " << attack_name << ". " << is_effective

@@ -14,6 +14,7 @@ class Attack {
         int damage;
         int first_usage;
         Attack(string, string, string, string, string);
+        string repr();
 };
 // class Attack:
 //     """A class to represent an attack"""
@@ -21,12 +22,12 @@ class Attack {
 //     def __init__(self, name: str, cost: str,
 //                  accuracy: str, damage: str, first_usage: str) -> None:
 //         """
-//         :param name: name of the attack
-//         :param cost: the integer that will be decreased from attacker's pp
-//         :param accuracy: the probability that the attack will succeed (0-100)
-//         :param damage: the integer that will be decreased from defender's hp
-//                        if the attack is succeeded
-//         :param first_usage: the first round where the attack may be used
+        // :param name: name of the attack
+        // :param cost: the integer that will be decreased from attacker's pp
+        // :param accuracy: the probability that the attack will succeed (0-100)
+        // :param damage: the integer that will be decreased from defender's hp
+        //                if the attack is succeeded
+        // :param first_usage: the first round where the attack may be used
 //         """
 //         self.name = name
 //         self.cost = -int(cost)
