@@ -132,10 +132,11 @@ class Node:
         Creates levels until number of levels reaches max_level OR
         winner wins the game
         """
-        leaves = deque([self])
+        leaves = deque()
+        node = self
         while not Node.END_FLAG:
 
-            node = leaves.popleft()
+            
             if node.level == max_level:
                 break
             children = []
@@ -167,6 +168,10 @@ class Node:
                 node.is_leaf = False
                 node.children.extend(children)
                 leaves.extend(children)
+            node = leaves.popleft()
+        
+        if node==self:
+            print(node)
 
     @staticmethod
     def __end_of_game(attacker, defender, winner, winner_is_pikachu):
