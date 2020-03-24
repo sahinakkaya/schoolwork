@@ -102,7 +102,8 @@ class Node:
     END_FLAG = []
 
     def __init__(self, pokemons: Tuple[Pokemon, Pokemon],
-                 probability: float, level: int,
+                 probability: float, level: int, parent: 'Node' = None,
+                 attack_name: str = None, is_effective: bool = None,
                  is_leaf: Optional[bool] = True) -> None:
         """
         :param pokemons: a pair of Pokemon instances where the next attacker comes
@@ -110,12 +111,18 @@ class Node:
         :param probability: the probability of encountering this state in the
                             game
         :param level: an integer that shows the level of this state
+        :param parent: parent of the node
+        :param attack_name: name of the attack used to reach this state
+        :param is_effective: effectiveness of the attack
         :param is_leaf: a boolean that tells if this state is end of game
         """
         self.pokemons = pokemons
         self.attacker, self.defender = pokemons
         self.probability = probability
         self.level = level
+        self.parent = parent
+        self.attack_name = attack_name
+        self.is_effective = is_effective
         self.is_leaf = is_leaf
         self.children = []
 
@@ -143,9 +150,9 @@ class Node:
                                                               effective,
                                                               num_attacks, max_level,
                                                               verbose)
-                    self.__check_if_end_of_game(attacker, defender, winner,
-                                                winner_is_pikachu)
-
+                    if self.__end_of_game(attacker, defender, winner,
+                                          winner_is_pikachu):
+                        Node.END_FLAG.append(True)
                     children.append(n)
 
                     if attack.accuracy != 1:
@@ -163,10 +170,11 @@ class Node:
                 leaves.extend(children)
 
     @staticmethod
-    def __check_if_end_of_game(attacker, defender, winner, winner_is_pikachu):
+    def __end_of_game(attacker, defender, winner, winner_is_pikachu):
         if defender.health_points == 0 and attacker.is_pikachu == winner_is_pikachu:
             if winner in ("pikachu", "blastoise"):
-                Node.END_FLAG.append(True)
+                return True
+        return False
 
     @staticmethod
     def __spawn_node(node, attack, effective, num_attacks, max_level, verbose):
@@ -175,14 +183,15 @@ class Node:
         attacker.attack(defender, attack, effective=effective)
         mul = attack.accuracy if effective else attack.inaccuracy
         probability = node.probability / num_attacks * mul
-        n = Node((defender, attacker), probability, node.level + 1)
+        n = Node((defender, attacker), probability, node.level + 1, node,
+                 attack.name, effective)
         if verbose and n.level == max_level:
             print(n)
         return attacker, defender, n
 
     @staticmethod
-    def breadth_first_search(root_node: 'Node',
-                             verbose: Optional[bool] = False) -> int:
+    def breadth_first_traversal(root_node: 'Node',
+                                verbose: Optional[bool] = False) -> int:
         """
         Performs a level order traversal on tree that has root 'root_node' and
         returns number of nodes
@@ -202,8 +211,25 @@ class Node:
         return node_count
 
     @staticmethod
-    def depth_first_search(root_node: 'Node',
-                           verbose: Optional[bool] = False) -> int:
+    def breadth_first_search(root_node: 'Node', winner: str):
+        if root_node is None:
+            return None
+        queue = deque((root_node,))
+        winner_is_pikachu = winner == "pikachu"
+        while len(queue) > 0:
+            node = queue.popleft()
+            if Node.__end_of_game(node.defender, node.attacker, winner,
+                                  winner_is_pikachu):
+                return node
+            # if node.attacker.is_pikachu == winner_is_pikachu and node.defender.health_points == 0:
+            #     print(node)
+            queue.extend(node.children)
+
+        return None
+
+    @staticmethod
+    def depth_first_traversal(root_node: 'Node',
+                              verbose: Optional[bool] = False) -> int:
         """
         Performs pre order traversal on tree that has root 'root_node' and
         returns number of nodes
@@ -225,7 +251,7 @@ class Node:
         blastoise_index = (pikachu_index + 1) % 2
         return " ".join(map(str, (self.pokemons[pikachu_index],
                                   self.pokemons[blastoise_index],
-                                  f"PROB:{self.probability:.3f}")))
+                                  f"PROB:{self.probability:.7f}")))
 
 
 def main():
@@ -254,16 +280,39 @@ def main():
         max_level = int(sys.argv[2])
         n.create_levels_until(max_level, verbose=False)
         if sys.argv[3] == "bfs":
-            node_count = Node.breadth_first_search(n, verbose)
+            node_count = Node.breadth_first_traversal(n, verbose)
         elif sys.argv[3] == "dfs":
-            node_count = Node.depth_first_search(n, verbose)
+            node_count = Node.depth_first_traversal(n, verbose)
         else:
             raise Exception
 
         print(f"node count is: {node_count:,}")
     elif sys.argv[1] == "part3":
         n.create_levels_until(winner=sys.argv[2], verbose=False)
-        Node.breadth_first_search(n, verbose=True)
+        node = Node.breadth_first_search(n, sys.argv[2])
+        list_of_nodes = []
+        while node.parent:
+            list_of_nodes.append(node)
+            node = node.parent
+
+        while list_of_nodes:
+            node = list_of_nodes.pop()
+            if node.attacker.is_pikachu:
+                prev_attacker = "Blastoise"
+                pikachu_hp = node.attacker.health_points
+                blastoise_hp = node.defender.health_points
+            else:
+                prev_attacker = "Pikachu"
+                pikachu_hp = node.defender.health_points
+                blastoise_hp = node.attacker.health_points
+
+            attack_name = node.attack_name
+            is_effective = "Effective" if node.is_effective else "Noneffective"
+            print(f"{prev_attacker} used {attack_name}. {is_effective} "
+                  f"(P:{pikachu_hp}, B:{blastoise_hp})")
+
+        print(f"Level count: {node.level}")
+        print(f"Probability: {node.probability}")
 
     total = time.perf_counter() - start
     print(f"Took {total:.2f} seconds to execute")
