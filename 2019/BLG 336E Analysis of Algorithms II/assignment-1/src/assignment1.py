@@ -98,7 +98,6 @@ class Pokemon:
 
 class Node:
     """A class to represent a state in the game"""
-    STOP_FLAG = []
     END_FLAG = []
 
     def __init__(self, pokemons: Tuple[Pokemon, Pokemon],
@@ -221,8 +220,6 @@ class Node:
             if Node.__end_of_game(node.defender, node.attacker, winner,
                                   winner_is_pikachu):
                 return node
-            # if node.attacker.is_pikachu == winner_is_pikachu and node.defender.health_points == 0:
-            #     print(node)
             queue.extend(node.children)
 
         return None
