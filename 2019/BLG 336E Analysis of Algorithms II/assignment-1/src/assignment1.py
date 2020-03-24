@@ -98,7 +98,8 @@ class Pokemon:
 
 class Node:
     """A class to represent a state in the game"""
-    MAX_LEVEL = -1
+    STOP_FLAG = []
+    END_FLAG = []
 
     def __init__(self, pokemons: Tuple[Pokemon, Pokemon],
                  probability: float, level: int,
@@ -118,37 +119,66 @@ class Node:
         self.is_leaf = is_leaf
         self.children = []
 
-    def create_children(self, verbose: Optional[bool] = True) -> None:
-        """Creates children and calls itself recursively on children"""
-        if self.level >= Node.MAX_LEVEL:
-            if verbose:
-                print(self)
-            return
-        children = []
-        if self.attacker.health_points > 0:
-            possible_attacks = self.attacker.get_attacks(self.level)
-            num_attacks = len(possible_attacks)
-            for attack in possible_attacks:
-                attacker, defender = self.attacker.copy(), self.defender.copy()
-                # Effective
-                attacker.attack(defender, attack, effective=True)
-                probability = self.probability / num_attacks * attack.accuracy
-                node = Node((defender, attacker), probability, self.level + 1)
-                children.append(node)
+    def create_levels_until(self, max_level: Optional[int] = 999,
+                            winner: Optional[str] = "",
+                            verbose: Optional[bool] = True) -> None:
+        """
+        Creates levels until number of levels reaches max_level OR
+        winner wins the game
+        """
+        leaves = deque([self])
+        while not Node.END_FLAG:
 
-                if attack.accuracy != 1:
-                    # Not effective
-                    attacker, defender = self.attacker.copy(), self.defender.copy()
-                    attacker.attack(defender, attack, effective=False)
-                    probability = self.probability / num_attacks * attack.inaccuracy
-                    node = Node((defender, attacker), probability, self.level + 1)
-                    children.append(node)
+            node = leaves.popleft()
+            if node.level == max_level:
+                break
+            children = []
+            winner_is_pikachu = winner == "pikachu"
+            if node.attacker.health_points > 0:
+                possible_attacks = node.attacker.get_attacks(node.level)
+                num_attacks = len(possible_attacks)
+                for attack in possible_attacks:
+                    effective = True
+                    attacker, defender, n = self.__spawn_node(node, attack,
+                                                              effective,
+                                                              num_attacks, max_level,
+                                                              verbose)
+                    self.__check_if_end_of_game(attacker, defender, winner,
+                                                winner_is_pikachu)
 
-        if len(children) > 0:
-            self.is_leaf = False
-            self.children.extend(children)
-            for child in children:
-                child.create_children(verbose)
+                    children.append(n)
+
+                    if attack.accuracy != 1:
+                        effective = False
+                        attacker, defender, n = self.__spawn_node(node, attack,
+                                                                  effective,
+                                                                  num_attacks,
+                                                                  max_level,
+                                                                  verbose)
+                        children.append(n)
+
+            if len(children) > 0:
+                node.is_leaf = False
+                node.children.extend(children)
+                leaves.extend(children)
+
+    @staticmethod
+    def __check_if_end_of_game(attacker, defender, winner, winner_is_pikachu):
+        if defender.health_points == 0 and attacker.is_pikachu == winner_is_pikachu:
+            if winner in ("pikachu", "blastoise"):
+                Node.END_FLAG.append(True)
+
+    @staticmethod
+    def __spawn_node(node, attack, effective, num_attacks, max_level, verbose):
+        attacker, defender = node.attacker.copy(), node.defender.copy()
+        # Effective
+        attacker.attack(defender, attack, effective=effective)
+        mul = attack.accuracy if effective else attack.inaccuracy
+        probability = node.probability / num_attacks * mul
+        n = Node((defender, attacker), probability, node.level + 1)
+        if verbose and n.level == max_level:
+            print(n)
+        return attacker, defender, n
 
     @staticmethod
     def breadth_first_search(root_node: 'Node',
@@ -201,9 +231,10 @@ class Node:
 def main():
     import sys
     import time
+    # TODO: move this timer to part 2
     start = time.perf_counter()
-    pikachu = Pokemon("pikachu", 273, 100)
-    blastoise = Pokemon("blastoise", 361, 100)
+    pikachu = Pokemon("pikachu", 200, 100)
+    blastoise = Pokemon("blastoise", 200, 100)
     # a = pikachu.copy()
     # print(a == pikachu)
     # print(a.__dict__)
@@ -212,13 +243,16 @@ def main():
     # print(*pikachu.get_attacks(3), sep="\n")
     # print(*blastoise.get_attacks(0), sep="\n")
     n = Node((pikachu, blastoise), 1.0, 0)
-    Node.MAX_LEVEL = int(sys.argv[2])
     # Node.MAX_LEVEL = 3
     verbose = sys.argv[-1] == "v"
     if sys.argv[1] == "part1":
-        n.create_children(verbose)
+        # Node.MAX_LEVEL = int(sys.argv[2])
+        max_level = int(sys.argv[2])
+        n.create_levels_until(max_level, verbose=verbose)
     elif sys.argv[1] == "part2":
-        n.create_children(verbose=False)
+        # Node.MAX_LEVEL = int(sys.argv[2])
+        max_level = int(sys.argv[2])
+        n.create_levels_until(max_level, verbose=False)
         if sys.argv[3] == "bfs":
             node_count = Node.breadth_first_search(n, verbose)
         elif sys.argv[3] == "dfs":
@@ -227,6 +261,10 @@ def main():
             raise Exception
 
         print(f"node count is: {node_count:,}")
+    elif sys.argv[1] == "part3":
+        n.create_levels_until(winner=sys.argv[2], verbose=False)
+        Node.breadth_first_search(n, verbose=True)
+
     total = time.perf_counter() - start
     print(f"Took {total:.2f} seconds to execute")
 
