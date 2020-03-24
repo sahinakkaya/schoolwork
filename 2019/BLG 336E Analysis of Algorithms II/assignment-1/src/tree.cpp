@@ -149,3 +149,37 @@ int Tree::depth_first_traversal(bool verbose){
     }
     return node_count;
 }
+
+void Tree::print_path_for_node(Node* node){
+    vector<Node*> list_of_nodes;
+    while (node->parent){
+        list_of_nodes.push_back(node);
+        node = node->parent;
+    }
+    int pikachu_hp, blastoise_hp;
+    string prev_attacker, attack_name;
+    while (list_of_nodes.size()>0){
+        node = list_of_nodes.back();
+        list_of_nodes.pop_back();
+        if (node->attacker->is_pikachu){
+            prev_attacker = "Blastoise";
+            pikachu_hp = node->attacker->health_points;
+            blastoise_hp = node->defender->health_points;
+        }
+        else{
+            prev_attacker = "Pikachu";
+            pikachu_hp = node->defender->health_points;
+            blastoise_hp = node->attacker->health_points;
+        }
+         attack_name = node->attack_name;
+        string is_effective = node->is_effective? "Effective":"Noneffective";
+
+        cout << prev_attacker << " used " << attack_name << ". " << is_effective
+            << " (P:" << pikachu_hp << ", B:"<<blastoise_hp<<")"<<endl;
+    }
+    cout << "Level count: "<< node->level <<endl;
+    cout << "Probability: "<< node->probability << endl;
+
+
+   
+}

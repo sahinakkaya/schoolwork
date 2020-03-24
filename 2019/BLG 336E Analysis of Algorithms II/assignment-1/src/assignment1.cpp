@@ -12,7 +12,8 @@ int main(int argc, char**argv){
     // cout << (n.parent == nullptr) << endl;
     // Node p = Node(make_pair(pikachu, blastoise), 0.5, 0, &n);
     // cout << (p.parent->parent == nullptr) << endl;
-
+    clock_t t;
+    t = clock();
     Tree tree;
     tree.create_root(&n);
     int max_level;
@@ -35,12 +36,14 @@ int main(int argc, char**argv){
             throw "enter dfs or bfs";
         cout << "node count is: " << node_count <<endl;
     }else if (part =="part3"){
+
         string winner_pokemon = argv[2];
         tree.create_levels_until(999, winner_pokemon);
         Node* node = tree.breadth_first_search(winner_pokemon);
-        node->print();
-
+        tree.print_path_for_node(node);
     }
+    t = clock() - t;
+    cout << "It took " << ((float)t) / CLOCKS_PER_SEC << " seconds to execute"<<endl;
     //Pokemon p = pikachu.copy();
     //p.health_points = 0;
     //cout << p.health_points<< endl;
