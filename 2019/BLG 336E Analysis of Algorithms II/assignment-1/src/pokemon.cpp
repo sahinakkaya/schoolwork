@@ -18,12 +18,14 @@ string Pokemon::name(){
     return this->is_pikachu? "pikachu" : "blastoise";
 }
 
+string Pokemon::repr(){
+    string initial = this->name().substr(0, 1);
+    for (auto & c: initial) c = toupper(c);
+    return initial + "_HP:" + to_string(health_points) + " "+ initial +"_PP:" + to_string(power_points);
+
+}
+
 Pokemon::Pokemon(){}
-// Pokemon& Pokemon::operator = (const Pokemon &t) 
-// { 
-//     cout<<"Assignment operator called "<<endl; 
-//     return *this; 
-// }  
 Pokemon::Pokemon(string name, int health_points, int power_points){
     this->health_points = health_points;
     this->power_points = power_points;

@@ -6,7 +6,7 @@ class Node{
     public:
         static bool END_FLAG;
 
-        pair<Pokemon, Pokemon> pokemons;
+        pair<Pokemon*, Pokemon*> pokemons;
         Pokemon* attacker;
         Pokemon* defender;
         double probability;
@@ -16,7 +16,8 @@ class Node{
         bool is_effective;
         bool is_leaf;
         vector<Node*> children;
-        Node(pair<Pokemon, Pokemon>, double, int, Node*, string="som", bool=true, bool=true);
+        Node(pair<Pokemon*, Pokemon*>, double, int, Node*, string="som", bool=true, bool=true);
+        string repr();
 };
 #endif
 // class Node:

@@ -19,6 +19,7 @@ class Pokemon{
         string name();
         Pokemon copy();
         void attack(Pokemon&, const Attack&, bool);
+        string repr();
 
 };
 
