@@ -30,10 +30,16 @@ int main(int argc, char**argv){
         if (t == "bfs")
             node_count = tree.breadth_first_traversal(verbose);
         else if (t == "dfs")
-            node_count = 0;
+            node_count = tree.depth_first_traversal(verbose);
         else
             throw "enter dfs or bfs";
         cout << "node count is: " << node_count <<endl;
+    }else if (part =="part3"){
+        string winner_pokemon = argv[2];
+        tree.create_levels_until(999, winner_pokemon);
+        Node* node = tree.breadth_first_search(winner_pokemon);
+        node->print();
+
     }
     //Pokemon p = pikachu.copy();
     //p.health_points = 0;

@@ -129,17 +129,23 @@ Node* Tree::breadth_first_search(string winner){
     }
     return nullptr;
 }
-//     @staticmethod
-    // def breadth_first_search(root_node: 'Node', winner: str):
-    //     if root_node is None:
-    //         return None
-    //     queue = deque((root_node,))
-    //     winner_is_pikachu = winner == "pikachu"
-    //     while len(queue) > 0:
-    //         node = queue.popleft()
-    //         if Node.__end_of_game(node.defender, node.attacker, winner,
-    //                               winner_is_pikachu):
-    //             return node
-    //         queue.extend(node.children)
 
-    //     return None
+int Tree::depth_first_traversal(bool verbose){
+    if (root ==nullptr)
+        return 0;
+    int node_count = 0;
+    vector<Node*> stack;
+    stack.push_back(root);
+    Node* node;
+    while (stack.size() > 0){
+        node_count++;
+        node = stack.back();
+        stack.pop_back();
+        if (verbose)
+            node->print();
+        for (auto it = node->children.rbegin(); it != node->children.rend(); ++it){
+            stack.push_back(*it);
+        }
+    }
+    return node_count;
+}
