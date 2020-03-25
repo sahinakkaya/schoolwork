@@ -62,7 +62,6 @@ Pokemon::Pokemon(string name, int health_points, int power_points){
         vector<Attack> attacks = read_attacks_file(name); 
         ATTACKS[name] = attacks;
     }
-    this->read_attacks_file(name);
 }
 
 /* 

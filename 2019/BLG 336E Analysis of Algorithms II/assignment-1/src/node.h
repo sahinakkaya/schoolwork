@@ -4,6 +4,7 @@
 using namespace std;
 class Node{
     public:
+        
         pair<Pokemon*, Pokemon*> pokemons;
         Pokemon* attacker;
         Pokemon* defender;
@@ -15,6 +16,7 @@ class Node{
         bool is_leaf;
         vector<Node*> children;
         Node(const pair<Pokemon, Pokemon>&, double, int, Node*, string="som", bool=true, bool=true);
+        Node(const Node&); // copy constructor
         string repr();
         void print();
         ~Node();

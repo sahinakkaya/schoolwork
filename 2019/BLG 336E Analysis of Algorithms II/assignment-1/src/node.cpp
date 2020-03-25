@@ -32,6 +32,24 @@ string Node::repr(){
     string level = " LEVEL:" + to_string(this->level);
     return f + " " + s + prob;
 }
+Node::Node(const Node& node){
+    /*Compiler generated code does not allocates memory so
+    we need to do this manually */
+    attacker = new Pokemon(*node.attacker);
+    defender = new Pokemon(*node.defender);
+
+    /* But the rest is same, so if there is an easy way for this,
+    like super() in python, please let me now because this is 
+    really bad... */
+    pokemons  = make_pair(attacker, defender);
+    probability = node.probability;
+    level = node.level;
+    parent = node.parent;
+    attack_name = node.attack_name;
+    is_effective = node.is_effective;
+    is_leaf = node.is_leaf;
+
+}
 
 void Node::print(){
     cout << repr() <<endl;

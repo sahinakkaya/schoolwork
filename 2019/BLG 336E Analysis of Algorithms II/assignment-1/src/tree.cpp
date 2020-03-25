@@ -185,4 +185,6 @@ Tree::~Tree(){
     // cout << "node gets deleted (root)";
     // root->print();
     delete root;
+    root=nullptr;
+    end_flag=false;
 }
