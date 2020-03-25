@@ -11,11 +11,11 @@
 :param is_effective: effectiveness of the attack
 :param is_leaf: a boolean that tells if this state is end of game
 */
-Node::Node(pair<Pokemon*, Pokemon*> pokemons, double probability, int level, 
+Node::Node(const pair<Pokemon, Pokemon>& pokemons, double probability, int level, 
             Node* parent, string attack_name , bool is_effective, bool is_leaf){
-    this->pokemons = pokemons;
-    this->attacker = pokemons.first;
-    this->defender = pokemons.second;
+    this->attacker = new Pokemon(pokemons.first);
+    this->defender = new Pokemon(pokemons.second);
+    this->pokemons = make_pair(attacker, defender);
     this->probability = probability;
     this->level = level;
     this->parent = parent;
@@ -35,4 +35,14 @@ string Node::repr(){
 
 void Node::print(){
     cout << repr() <<endl;
+}
+
+Node::~Node(){
+    delete attacker;
+    delete defender;
+    for(auto child:children){
+        // cout << "node gets deleted ";
+        // child->print();
+        delete child;
+    }
 }

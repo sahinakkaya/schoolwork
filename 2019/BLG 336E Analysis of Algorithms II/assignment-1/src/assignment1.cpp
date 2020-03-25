@@ -5,12 +5,11 @@ int main(int argc, char**argv){
     Pokemon pikachu = Pokemon("pikachu", 200, 100);
     Pokemon blastoise = Pokemon("blastoise", 200, 100);
 
-    Node n = Node(make_pair(&pikachu, &blastoise), 1, 0, nullptr);
-
+    Node n = Node(make_pair(pikachu, blastoise), 1, 0, nullptr);
     clock_t t;
     t = clock();
     Tree tree;
-    tree.create_root(&n);
+    tree.attach_root(n);
     int max_level;
     string part = argv[1];
     string last_arg = argv[argc-1];

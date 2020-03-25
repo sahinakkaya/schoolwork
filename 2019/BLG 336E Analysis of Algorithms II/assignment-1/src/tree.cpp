@@ -7,8 +7,11 @@ Tree::Tree(){
     end_flag = false;
 }
 
-void Tree::create_root(Node* node){
-    root = node;
+void Tree::attach_root(Node& node){
+    if (root){
+        this->~Tree();
+    }
+    root = new Node(node);
 }
 /*
  *Creates levels until number of levels reaches max_level OR
@@ -27,24 +30,24 @@ void Tree::create_levels_until(int max_level, string winner, bool verbose){
             int num_attacks = possible_attacks.size();
             for (auto attack :possible_attacks){
                 bool effective = true;
-                Pokemon* attacker = new Pokemon(*node->attacker);
-                Pokemon* defender = new Pokemon(*node->defender);
-                attacker->attack(*defender, attack, effective);
+                Pokemon attacker = Pokemon(*node->attacker);
+                Pokemon defender = Pokemon(*node->defender);
+                attacker.attack(defender, attack, effective);
 
                 double probability = node->probability / num_attacks * attack.accuracy;
                 Node* n = new Node(make_pair(defender, attacker), probability, node->level + 1, node,
                                 attack.name, effective);
                 if (verbose && n->level == max_level)
                     n->print();
-                if (defender->health_points == 0 and attacker->is_pikachu == winner_is_pikachu)
+                if (defender.health_points == 0 and attacker.is_pikachu == winner_is_pikachu)
                     if (winner == "pikachu" || winner == "blastoise")
                         end_flag = true;
                 children.push_back(n);
                 if (attack.accuracy != 1){
                         effective = false;
-                        Pokemon* attacker = new Pokemon(*node->attacker);
-                        Pokemon* defender = new Pokemon(*node->defender);
-                        attacker->attack(*defender, attack, effective);
+                        Pokemon attacker = Pokemon(*node->attacker);
+                        Pokemon defender = Pokemon(*node->defender);
+                        attacker.attack(defender, attack, effective);
                         double probability = node->probability / num_attacks * attack.inaccuracy;
                         Node* n = new Node(make_pair(defender, attacker), probability, node->level + 1, node,
                                 attack.name, effective);
@@ -176,6 +179,10 @@ void Tree::print_path_for_node(Node* node){
     cout << "Level count: "<< node->level <<endl;
     cout << "Probability: "<< node->probability << endl;
 
+}
 
-   
+Tree::~Tree(){
+    // cout << "node gets deleted (root)";
+    // root->print();
+    delete root;
 }

@@ -3,7 +3,7 @@ CPPFLAGS = -Wall -Werror -std=c++11
 SOURCES=$(wildcard ./*.cpp)
 OBJECTS = $(patsubst %.cpp, %.o, $(SOURCES))
 
-main: $(OBJECTS)
+project1: $(OBJECTS)
 	$(CPP) $(CPPFLAGS) -o $@ $^
 	rm -rf *.o
 
@@ -12,4 +12,4 @@ $(OBJECTS): $(SOURCES)
 
 clean:
 	rm -rf *.o
-	rm main
+	rm project1
