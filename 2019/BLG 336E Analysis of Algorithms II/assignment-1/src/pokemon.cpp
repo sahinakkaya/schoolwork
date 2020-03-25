@@ -84,11 +84,6 @@ vector<Attack> Pokemon::get_attacks(int level){
     return possible_attacks;
 }
 
-Pokemon Pokemon::copy(){
-    string name = this->name();
-    return Pokemon(name, health_points, power_points);
-}
-
 /*
  *Attacks to the opponent with specified attack and do damage
  *if effective is True

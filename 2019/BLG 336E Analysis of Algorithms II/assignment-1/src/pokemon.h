@@ -17,7 +17,6 @@ class Pokemon{
         Pokemon();
         vector<Attack> get_attacks(int);
         string name();
-        Pokemon copy();
         void attack(Pokemon&, const Attack&, bool);
         string repr();
 
