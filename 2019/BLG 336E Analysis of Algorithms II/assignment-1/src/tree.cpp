@@ -30,42 +30,26 @@ void Tree::create_levels_until(int max_level, string winner, bool verbose){
             int num_attacks = possible_attacks.size();
             for (auto attack :possible_attacks){
                 bool effective = true;
-                Pokemon attacker = Pokemon(*node->attacker);
-                Pokemon defender = Pokemon(*node->defender);
-                attacker.attack(defender, attack, effective);
-
-                double probability = node->probability / num_attacks * attack.accuracy;
-                Node* n = new Node(make_pair(defender, attacker), probability, node->level + 1, node,
-                                attack.name, effective);
-                if (verbose && n->level == max_level)
-                    n->print();
-                if (defender.health_points == 0 and attacker.is_pikachu == winner_is_pikachu)
-                    if (winner == "pikachu" || winner == "blastoise")
-                        end_flag = true;
+                Pokemon attacker, defender;
+                Node* n;
+                tie(attacker, defender, n) = spawn_node(node, attack, effective, num_attacks, max_level, verbose);
+                end_flag = end_flag || end_of_game(attacker, defender, winner, winner_is_pikachu);
                 children.push_back(n);
                 if (attack.accuracy != 1){
-                        effective = false;
-                        Pokemon attacker = Pokemon(*node->attacker);
-                        Pokemon defender = Pokemon(*node->defender);
-                        attacker.attack(defender, attack, effective);
-                        double probability = node->probability / num_attacks * attack.inaccuracy;
-                        Node* n = new Node(make_pair(defender, attacker), probability, node->level + 1, node,
-                                attack.name, effective);
-                        if (verbose && n->level == max_level)
-                            n->print();
-                        children.push_back(n);
+                    effective = false;
+                    tie(attacker, defender, n) = spawn_node(node, attack, effective, num_attacks, max_level, verbose);
+                    children.push_back(n);
                 }
             }
         }
         if (children.size() > 0){
-                node->is_leaf = false;
-                for (auto child:children){
-                    node->children.push_back(child);
-                }
-                for (auto child:children){
-                    leaves.push_back(child);
-                }
-
+            node->is_leaf = false;
+            for (auto child:children){
+                node->children.push_back(child);
+            }
+            for (auto child:children){
+                leaves.push_back(child);
+            }
         }
         node = leaves.front();
         leaves.pop_front();
@@ -74,7 +58,29 @@ void Tree::create_levels_until(int max_level, string winner, bool verbose){
     if(node==root){
         root->print();
     }
-}  
+} 
+
+PokemonsAndNode Tree::spawn_node(Node* node, Attack& attack, 
+                                                     bool effective, int num_attacks, 
+                                                     int max_level, bool verbose){
+    Pokemon attacker = Pokemon(*node->attacker);
+    Pokemon defender = Pokemon(*node->defender);
+    attacker.attack(defender, attack, effective);
+    double mul = effective? attack.accuracy: attack.inaccuracy;
+    double probability = node->probability / num_attacks * mul;
+    Node* n = new Node(make_pair(defender, attacker), probability, node->level + 1, node,
+                                attack.name, effective);
+    if (verbose and n->level == max_level)
+        n->print();
+    return make_tuple(attacker, defender, n);
+}
+
+bool Tree::end_of_game(const Pokemon& attacker, const Pokemon& defender, const string& winner, bool winner_is_pikachu){
+    return defender.health_points == 0 && attacker.is_pikachu == winner_is_pikachu && 
+                (winner=="pikachu" || winner=="blastoise");
+}
+
+
 /*
  *Performs a level order traversal on tree that has root 'root_node' and
  *returns number of nodes
@@ -98,15 +104,8 @@ int Tree::breadth_first_traversal(bool verbose){
     return node_count;
 }
 
-bool Tree::end_of_game(Pokemon* attacker, Pokemon* defender, string winner, bool winner_is_pikachu){
-    if (defender->health_points == 0 and attacker->is_pikachu == winner_is_pikachu)
-            if (winner =="pikachu" || winner == "blastoise")
-                return true;
-        return false;
 
-}
-
-Node* Tree::breadth_first_search(string winner){
+Node* Tree::breadth_first_search(const string winner){
     if(root == nullptr)
         return nullptr;
 
@@ -117,7 +116,7 @@ Node* Tree::breadth_first_search(string winner){
     while(not queue.empty()){
         node = queue.front();
         queue.pop_front();
-        if (end_of_game(node->defender, node->attacker, winner, winner_is_pikachu))
+        if (end_of_game(*node->defender, *node->attacker, winner, winner_is_pikachu))
             return node;
 
         for(auto child:node->children)
