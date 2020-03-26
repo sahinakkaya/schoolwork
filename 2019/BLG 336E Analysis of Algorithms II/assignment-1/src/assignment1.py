@@ -115,7 +115,6 @@ class Node:
         :param is_effective: effectiveness of the attack
         :param is_leaf: a boolean that tells if this state is end of game
         """
-        self.pokemons = pokemons
         self.attacker, self.defender = pokemons
         self.probability = probability
         self.level = level
@@ -135,8 +134,6 @@ class Node:
         leaves = deque()
         node = self
         while not Node.END_FLAG:
-
-            
             if node.level == max_level:
                 break
             children = []
@@ -169,8 +166,8 @@ class Node:
                 node.children.extend(children)
                 leaves.extend(children)
             node = leaves.popleft()
-        
-        if node==self:
+
+        if node == self:
             print(node)
 
     @staticmethod
@@ -183,7 +180,6 @@ class Node:
     @staticmethod
     def __spawn_node(node, attack, effective, num_attacks, max_level, verbose):
         attacker, defender = node.attacker.copy(), node.defender.copy()
-        # Effective
         attacker.attack(defender, attack, effective=effective)
         mul = attack.accuracy if effective else attack.inaccuracy
         probability = node.probability / num_attacks * mul
@@ -249,36 +245,23 @@ class Node:
         return node_count
 
     def __str__(self):
-        pikachu_index = 0 if self.pokemons[0].is_pikachu else 1
-        blastoise_index = (pikachu_index + 1) % 2
-        return " ".join(map(str, (self.pokemons[pikachu_index],
-                                  self.pokemons[blastoise_index],
-                                  f"PROB:{self.probability:.7f}")))
+        pikachu = self.attacker if self.attacker.is_pikachu else self.defender
+        blastoise = self.defender if self.attacker.is_pikachu else self.attacker
+        return " ".join(map(str, (pikachu, blastoise, f"PROB:{self.probability:.7f}")))
 
 
 def main():
     import sys
     import time
-    # TODO: move this timer to part 2
     start = time.perf_counter()
     pikachu = Pokemon("pikachu", 200, 100)
     blastoise = Pokemon("blastoise", 200, 100)
-    # a = pikachu.copy()
-    # print(a == pikachu)
-    # print(a.__dict__)
-    # print(pikachu.__dict__)
-    # print(a.get_attacks(3))
-    # print(*pikachu.get_attacks(3), sep="\n")
-    # print(*blastoise.get_attacks(0), sep="\n")
     n = Node((pikachu, blastoise), 1.0, 0)
-    # Node.MAX_LEVEL = 3
     verbose = sys.argv[-1] == "v"
     if sys.argv[1] == "part1":
-        # Node.MAX_LEVEL = int(sys.argv[2])
         max_level = int(sys.argv[2])
         n.create_levels_until(max_level, verbose=verbose)
     elif sys.argv[1] == "part2":
-        # Node.MAX_LEVEL = int(sys.argv[2])
         max_level = int(sys.argv[2])
         n.create_levels_until(max_level, verbose=False)
         if sys.argv[3] == "bfs":
