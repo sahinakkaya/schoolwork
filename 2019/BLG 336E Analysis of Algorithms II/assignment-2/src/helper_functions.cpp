@@ -52,7 +52,12 @@ void printPath(int parent[], int dist[], int j) {
 
 stack<pair<int, int>> get_node_times(const int *parent, int *dist, int src, int j) {
     stack<pair<int, int>> node_times;
-    while(parent[j] != -1){
+
+    while (parent[j] != -1) {
+        if (dist[j]==INT_MAX){
+            stack<pair<int, int>> no_solution;
+            return no_solution;
+        }
         node_times.push(make_pair(j, dist[j]));
         j = parent[j];
     }
@@ -80,7 +85,7 @@ void printSolution(int dist[], int num_of_nodes,
 }
 
 
-void get_shortest_path(int **graph, int src, int dst, int num_of_nodes, int initial_val) {
+stack<pair<int, int>> get_shortest_path(int **graph, int src, int dst, int num_of_nodes, int initial_val) {
 
     // The output array. dist[i]
     // will hold the shortest
@@ -126,8 +131,7 @@ void get_shortest_path(int **graph, int src, int dst, int num_of_nodes, int init
         // Update dist value of the
         // adjacent vertices of the
         // picked vertex.
-        for (int v = 0; v < num_of_nodes; v++)
-
+        for (int v = 0; v < num_of_nodes; v++) {
             // Update dist[v] only if is
             // not in sptSet, there is
             // an edge from u to v, and
@@ -140,15 +144,14 @@ void get_shortest_path(int **graph, int src, int dst, int num_of_nodes, int init
                 parent[v] = u;
                 dist[v] = dist[u] + graph[u][v];
             }
+        }
     }
 
     // print the constructed
     // distance array
 //    printSolution(dist, num_of_nodes, parent, src, dst);
     auto solution = get_node_times(parent, dist, src, dst);
-    while (!solution.empty()){
-        auto pair = solution.top();
-        solution.pop();
-        cout << pair.first << ": " << pair.second << " ";
-    }
+    return solution;
+
+
 }

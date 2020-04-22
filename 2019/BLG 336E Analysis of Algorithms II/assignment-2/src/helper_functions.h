@@ -18,7 +18,7 @@ void printPath(int parent[], int dist[], int j);
 void printSolution(int dist[], int num_of_nodes,
                    int parent[], int src, int dst = -1);
 
-void get_shortest_path(int **graph, int src, int dst, int num_of_nodes, int initial_val = 0);
+stack<pair<int, int>> get_shortest_path(int **graph, int src, int dst, int num_of_nodes, int initial_val = 0);
 stack<pair<int, int>> get_node_times(const int *parent, int *dist, int src, int j);
 
 
