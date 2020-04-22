@@ -169,6 +169,52 @@ Solution get_shortest_path(int **graph, int src, int dst, int num_of_nodes, int 
     return solution;
 }
 
+Solution select_shortest_path(int **graph, int src, int dst, int num_of_nodes, int starting_time, int intersection_node,
+                              Solution &s) {
+    int distance = INT_MAX;
+    int i = (int) s.size() - 1;
+    int current_node = s[i].first;
+    Solution path, r;
+    while (current_node != intersection_node) {
+//        cout << "removing edge ";
+        int next_node = s[i - 1].first;
+//        cout << current_node << " " << next_node << endl;
+//        return r;
+        int temp = graph[current_node][next_node];
+//        cout << temp << endl;
+        graph[current_node][next_node] = 0;
+        path = get_shortest_path(graph, src, dst, num_of_nodes, starting_time);
+        if (path.empty()) {
+//            cout << "no sol!!!" << endl;
+            graph[current_node][next_node] = temp;
+            current_node = next_node;
+            i--;
+            continue;
+        }
+        int path_length = path[0].second;
+        cout << "Found a path with length " << path_length << endl;
+        cout << "current path lenght is " << distance << endl;
+        if (path_length < distance) {
+            distance = path_length;
+            r = path;
+            cout << "So we accept the new path" << endl;
+        } else {
+            cout << "Current one is better" << endl;
+        }
+        graph[current_node][next_node] = temp;
+
+        current_node = next_node;
+        i--;
+    }
+    if (r.empty()) {
+        cout << "no solution, fall back to default one" << endl;
+        r = get_shortest_path(graph, src, dst, num_of_nodes, starting_time);
+    }
+    return r;
+
+}
+
+
 int get_intersection_node(Solution &first, Solution &second) {
     int time = 0;
     int f = (int) first.size() - 1;
@@ -178,10 +224,10 @@ int get_intersection_node(Solution &first, Solution &second) {
         int stime = second[s].second;
 
         time = min(ftime, stime);
-        if (ftime == stime){
+        if (ftime == stime) {
             int fnode = first[f].first;
             int snode = second[s].first;
-            if (fnode == snode){
+            if (fnode == snode) {
                 return fnode;
             }
         }

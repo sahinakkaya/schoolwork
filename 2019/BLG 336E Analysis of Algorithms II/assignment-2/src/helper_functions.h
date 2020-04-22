@@ -21,6 +21,7 @@ void printSolution(int dist[], int num_of_nodes,
 int print_solution(Solution&);
 int get_intersection_node(Solution&, Solution&);
 Solution get_shortest_path(int **graph, int src, int dst, int num_of_nodes, int starting_time = 0);
+Solution select_shortest_path(int **graph, int src, int dst, int num_of_nodes, int starting_time, int intersection_node, Solution&);
 Solution get_node_times(const int *parent, int *dist, int src, int j);
 
 

@@ -2,11 +2,14 @@
 // Created by sahin on 22/04/2020 at 09:48
 //
 
-// 8 hours left. I'm listening The Best of Mozart at the
-// the same time and enjoying my life :D :D
-// https://youtu.be/Rb0UmrCXxVA?t=3410
+// 4 hours left. I'm listening ITU's radio at the
+// the same time and still enjoying my life :D :D
+// http://eskiweb.radyo.itu.edu.tr/v1/klasik/index.html
+
+
 #include <fstream>
 #include <iostream>
+#include <climits>
 #include "helper_functions.h"
 
 using namespace std;
@@ -31,8 +34,9 @@ int main(int argc, char *argv[]) {
         adj_matrix[source][target] = weight;
     }
     file.close();
-    Solution j_hd = get_shortest_path(adj_matrix, jh, jd, num_of_nodes);
-    Solution l_hd = get_shortest_path(adj_matrix, lh, ld, num_of_nodes);
+    Solution j_hd, l_hd, j_dh, l_dh;
+    j_hd = get_shortest_path(adj_matrix, jh, jd, num_of_nodes);
+    l_hd = get_shortest_path(adj_matrix, lh, ld, num_of_nodes);
     int intersection_node = get_intersection_node(j_hd, l_hd);
 
     if (intersection_node == -1) {
@@ -43,9 +47,9 @@ int main(int argc, char *argv[]) {
         cout << "--------------------------" << endl;
         cout << "Lucy's path from hotel to destination" << endl;
         int l_duration = print_solution(l_hd);
-        Solution j_dh = get_shortest_path(adj_matrix, jd, jh, num_of_nodes, j_duration + 30);
-        Solution l_dh = get_shortest_path(adj_matrix, ld, lh, num_of_nodes, l_duration + 30);
-
+        j_dh = get_shortest_path(adj_matrix, jd, jh, num_of_nodes, j_duration + 30);
+        l_dh = get_shortest_path(adj_matrix, ld, lh, num_of_nodes, l_duration + 30);
+//        int jmin = INT_MAX, lmin = INT_MAX;
         intersection_node = get_intersection_node(j_dh, l_dh);
         if (intersection_node == -1) {
             cout << "---------return-----------" << endl;
@@ -58,12 +62,15 @@ int main(int argc, char *argv[]) {
             cout << "Duration: " << l_duration << endl;
         } else {
 
+            j_dh = select_shortest_path(adj_matrix, jd, jh, num_of_nodes, j_duration + 30, intersection_node, j_dh);
+            print_solution(j_dh);
+            l_dh = select_shortest_path(adj_matrix, ld, lh, num_of_nodes, l_duration+30, intersection_node, l_dh);
+            print_solution(l_dh);
             cout << "Intersection at " << intersection_node << "th node" << endl;
         }
 
 
-    }
-    else
+    } else
         cout << "Intersection at " << intersection_node << "th node" << endl;
 
 
