@@ -2,7 +2,7 @@
 // Created by sahin on 22/04/2020 at 09:48
 //
 
-// 10 hours left.
+// 9.5 hours left.
 #include <fstream>
 #include <iostream>
 #include "helper_functions.h"
@@ -29,7 +29,7 @@ int main(int argc, char *argv[]){
         adj_matrix[source][target] = weight;
     }
     print_matrix(adj_matrix, num_of_nodes);
-    get_shortest_path(adj_matrix, lh, num_of_nodes);
+    get_shortest_path(adj_matrix, jh, jd, num_of_nodes);
     file.close();
     return EXIT_SUCCESS;
 }
