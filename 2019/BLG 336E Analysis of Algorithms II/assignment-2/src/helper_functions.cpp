@@ -1,6 +1,7 @@
 #include <iostream>
 #include <iomanip>
 #include <climits>
+#include <stack>
 
 using namespace std;
 
@@ -49,6 +50,16 @@ void printPath(int parent[], int dist[], int j) {
     printf("(%d: %d) ", j, dist[j]);
 }
 
+stack<pair<int, int>> get_node_times(const int *parent, int *dist, int src, int j) {
+    stack<pair<int, int>> node_times;
+    while(parent[j] != -1){
+        node_times.push(make_pair(j, dist[j]));
+        j = parent[j];
+    }
+    node_times.push(make_pair(src, dist[src]));
+    return node_times;
+}
+
 void printSolution(int dist[], int num_of_nodes,
                    int parent[], int src, int dst = -1) {
     printf("Vertex\t Distance\tPath");
@@ -69,7 +80,7 @@ void printSolution(int dist[], int num_of_nodes,
 }
 
 
-void get_shortest_path(int **graph, int src, int dst, int num_of_nodes) {
+void get_shortest_path(int **graph, int src, int dst, int num_of_nodes, int initial_val) {
 
     // The output array. dist[i]
     // will hold the shortest
@@ -96,7 +107,7 @@ void get_shortest_path(int **graph, int src, int dst, int num_of_nodes) {
 
     // Distance of source vertex
     // from itself is always 0
-    dist[src] = 0;
+    dist[src] = initial_val;
 
     // Find shortest path
     // for all vertices
@@ -133,5 +144,11 @@ void get_shortest_path(int **graph, int src, int dst, int num_of_nodes) {
 
     // print the constructed
     // distance array
-    printSolution(dist, num_of_nodes, parent, src, dst);
+//    printSolution(dist, num_of_nodes, parent, src, dst);
+    auto solution = get_node_times(parent, dist, src, dst);
+    while (!solution.empty()){
+        auto pair = solution.top();
+        solution.pop();
+        cout << pair.first << ": " << pair.second << " ";
+    }
 }
