@@ -31,27 +31,23 @@ int main(int argc, char *argv[]) {
         adj_matrix[source][target] = weight;
     }
     file.close();
-//    print_matrix(adj_matrix, num_of_nodes);
     Solution j_hd = get_shortest_path(adj_matrix, jh, jd, num_of_nodes);
     Solution l_hd = get_shortest_path(adj_matrix, lh, ld, num_of_nodes);
-//    int intersection_node = get_intersection_node(j_hd, l_hd);
-    int intersection_node = -1;
+    int intersection_node = get_intersection_node(j_hd, l_hd);
 
     if (intersection_node == -1) {
 
         cout << "Joseph's path from hotel to destination" << endl;
         int j_duration = print_solution(j_hd);
-//        cout << "Duration: " << j_duration << endl;
 
         cout << "--------------------------" << endl;
         cout << "Lucy's path from hotel to destination" << endl;
         int l_duration = print_solution(l_hd);
-//        cout << "Duration: " << l_duration << endl;
         Solution j_dh = get_shortest_path(adj_matrix, jd, jh, num_of_nodes, j_duration + 30);
         Solution l_dh = get_shortest_path(adj_matrix, ld, lh, num_of_nodes, l_duration + 30);
 
-//        intersection_node = get_intersection_node(j_dh, l_dh);
-        if (intersection_node == -1){
+        intersection_node = get_intersection_node(j_dh, l_dh);
+        if (intersection_node == -1) {
             cout << "---------return-----------" << endl;
             cout << "Joseph's path from destination to hotel" << endl;
             j_duration = print_solution(j_dh);
@@ -60,12 +56,15 @@ int main(int argc, char *argv[]) {
             cout << "Lucy's path from destination to hotel" << endl;
             l_duration = print_solution(l_dh);
             cout << "Duration: " << l_duration << endl;
+        } else {
 
-
+            cout << "Intersection at " << intersection_node << "th node" << endl;
         }
 
 
     }
+    else
+        cout << "Intersection at " << intersection_node << "th node" << endl;
 
 
     return EXIT_SUCCESS;

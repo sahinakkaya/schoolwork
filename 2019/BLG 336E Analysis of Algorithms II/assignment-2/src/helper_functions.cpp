@@ -55,7 +55,7 @@ Solution get_node_times(const int *parent, int *dist, int src, int j) {
     Solution node_times;
 
     while (parent[j] != -1) {
-        if (dist[j]==INT_MAX){
+        if (dist[j] == INT_MAX) {
             Solution no_solution;
             return no_solution;
         }
@@ -84,14 +84,15 @@ void printSolution(int dist[], int num_of_nodes,
         printPath(parent, dist, dst);
     }
 }
-int print_solution(Solution& solution){
+
+int print_solution(Solution &solution) {
     int duration = 0;
     if (solution.empty()) {
         cout << "No solution" << endl;
         return INT_MAX;
     } else {
-        for(auto pair=solution.rbegin(); pair!= solution.rend(); pair++){
-            cout << "Node: "<< pair->first << " Time: " << pair->second << endl;
+        for (auto pair = solution.rbegin(); pair != solution.rend(); pair++) {
+            cout << "Node: " << pair->first << " Time: " << pair->second << endl;
             duration = pair->second;
         }
     }
@@ -168,3 +169,27 @@ Solution get_shortest_path(int **graph, int src, int dst, int num_of_nodes, int 
     return solution;
 }
 
+int get_intersection_node(Solution &first, Solution &second) {
+    int time = 0;
+    int f = (int) first.size() - 1;
+    int s = (int) second.size() - 1;
+    while (f > 0 or s > 0) {
+        int ftime = first[f].second;
+        int stime = second[s].second;
+
+        time = min(ftime, stime);
+        if (ftime == stime){
+            int fnode = first[f].first;
+            int snode = second[s].first;
+            if (fnode == snode){
+                return fnode;
+            }
+        }
+        if (time == ftime)
+            f -= 1;
+        else
+            s -= 1;
+    }
+    return -1;
+
+}
