@@ -2,7 +2,7 @@
 // Created by sahin on 22/04/2020 at 09:48
 //
 
-// 13 hours left.
+// 10 hours left.
 #include <fstream>
 #include <iostream>
 #include "helper_functions.h"
@@ -21,15 +21,15 @@ int main(int argc, char *argv[]){
     int** adj_matrix = allocate_matrix(num_of_nodes);
 
 
-    int jh, jd, lh, ld;
-    file >> jh >> jd >> lh >> ld;
+    int lh, ld, jh, jd;
+    file >> lh >> ld >> jh >> jd;
     int source, target, weight;
 
     while (file >> source >> target >> weight) {
         adj_matrix[source][target] = weight;
     }
     print_matrix(adj_matrix, num_of_nodes);
-
+    get_shortest_path(adj_matrix, lh, num_of_nodes);
     file.close();
     return EXIT_SUCCESS;
 }
