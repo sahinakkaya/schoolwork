@@ -2,6 +2,7 @@
 #include <iomanip>
 #include <climits>
 #include <stack>
+#include "helper_functions.h"
 
 using namespace std;
 
@@ -29,7 +30,7 @@ void print_matrix(int **matrix, int length) {
     }
 }
 
-int minDistance(int dist[], bool sptSet[], int node_count) {
+int minDistance(const int dist[], const bool sptSet[], int node_count) {
     // Initialize min value
     int min = INT_MAX, min_index = 0;
 
@@ -50,23 +51,23 @@ void printPath(int parent[], int dist[], int j) {
     printf("(%d: %d) ", j, dist[j]);
 }
 
-stack<pair<int, int>> get_node_times(const int *parent, int *dist, int src, int j) {
-    stack<pair<int, int>> node_times;
+Solution get_node_times(const int *parent, int *dist, int src, int j) {
+    Solution node_times;
 
     while (parent[j] != -1) {
         if (dist[j]==INT_MAX){
-            stack<pair<int, int>> no_solution;
+            Solution no_solution;
             return no_solution;
         }
-        node_times.push(make_pair(j, dist[j]));
+        node_times.push_back(make_pair(j, dist[j]));
         j = parent[j];
     }
-    node_times.push(make_pair(src, dist[src]));
+    node_times.push_back(make_pair(src, dist[src]));
     return node_times;
 }
 
 void printSolution(int dist[], int num_of_nodes,
-                   int parent[], int src, int dst = -1) {
+                   int parent[], int src, int dst) {
     printf("Vertex\t Distance\tPath");
     if (dst == -1) {
         for (int i = 0; i < num_of_nodes; i++) {
@@ -83,9 +84,22 @@ void printSolution(int dist[], int num_of_nodes,
         printPath(parent, dist, dst);
     }
 }
+int print_solution(Solution& solution){
+    int duration = 0;
+    if (solution.empty()) {
+        cout << "No solution" << endl;
+        return INT_MAX;
+    } else {
+        for(auto pair=solution.rbegin(); pair!= solution.rend(); pair++){
+            cout << "Node: "<< pair->first << " Time: " << pair->second << endl;
+            duration = pair->second;
+        }
+    }
+    return duration;
+}
 
 
-stack<pair<int, int>> get_shortest_path(int **graph, int src, int dst, int num_of_nodes, int initial_val) {
+Solution get_shortest_path(int **graph, int src, int dst, int num_of_nodes, int starting_time) {
 
     // The output array. dist[i]
     // will hold the shortest
@@ -112,7 +126,7 @@ stack<pair<int, int>> get_shortest_path(int **graph, int src, int dst, int num_o
 
     // Distance of source vertex
     // from itself is always 0
-    dist[src] = initial_val;
+    dist[src] = starting_time;
 
     // Find shortest path
     // for all vertices
@@ -152,6 +166,5 @@ stack<pair<int, int>> get_shortest_path(int **graph, int src, int dst, int num_o
 //    printSolution(dist, num_of_nodes, parent, src, dst);
     auto solution = get_node_times(parent, dist, src, dst);
     return solution;
-
-
 }
+

@@ -5,21 +5,23 @@
 #ifndef ASSIGNMENT_2_HELPER_FUNCTIONS_H
 #define ASSIGNMENT_2_HELPER_FUNCTIONS_H
 
-#include <stack>
+#include <vector>
 using namespace std;
+typedef vector<pair<int, int>> Solution;
 int **allocate_matrix(int node_count);
 
 void print_matrix(int **matrix, int length);
 
-int minDistance(int dist[], bool sptSet[], int node_count);
+int minDistance(const int dist[], const bool sptSet[], int node_count);
 
 void printPath(int parent[], int dist[], int j);
 
 void printSolution(int dist[], int num_of_nodes,
                    int parent[], int src, int dst = -1);
+int print_solution(Solution&);
 
-stack<pair<int, int>> get_shortest_path(int **graph, int src, int dst, int num_of_nodes, int initial_val = 0);
-stack<pair<int, int>> get_node_times(const int *parent, int *dist, int src, int j);
+Solution get_shortest_path(int **graph, int src, int dst, int num_of_nodes, int starting_time = 0);
+Solution get_node_times(const int *parent, int *dist, int src, int j);
 
 
 #endif //ASSIGNMENT_2_HELPER_FUNCTIONS_H
