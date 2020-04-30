@@ -153,16 +153,25 @@ int main(int argc, char const* argv[]) {
 
   // parent process
   if (pid != 0) {
-    bool reached_max_num_of_primes = false;
+    bool reached_max_num_of_primes = false, all_threads_created = true;
+
     // wait children and check status codes
-    while ((wpid = wait(&status)) > 0)
-      if (status == 256) reached_max_num_of_primes = true;
+    while ((wpid = wait(&status)) > 0){
+      if ((status >> 8) == 1) 
+        reached_max_num_of_primes = true;
+      else if((status>>8) == 2)
+        all_threads_created = false;
+    }
 
     if (reached_max_num_of_primes) {
       printf("ERROR: reached MAX_NUM_OF_PRIMES limit: %d\n", MAX_NUM_OF_PRIMES);
       shmctl(shmid_4_primes, IPC_RMID, 0);
       shmctl(shmid_4_num_of_primes, IPC_RMID, 0);
-      return EXIT_FAILURE;
+      return 1;
+    }
+    else if(!all_threads_created){
+      printf("There was an error while creating some of the threads. Scroll up to view it.\n");
+      printf("The prime list below might not be complete.\n");
     }
 
 
@@ -232,7 +241,7 @@ int main(int argc, char const* argv[]) {
         printf("Maybe your system does not allow this number of threads? ");
         printf("You can try again with lower number of threads\n");
         free(process_primes);
-        return EXIT_FAILURE;
+        return 2;
       }
     }
     // wait until all workers done
