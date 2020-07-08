@@ -1,0 +1,27 @@
+- init:
+    run: rm -f part1 part1.o part1.hi
+    visible: false
+- compile:
+    run: ghc part1.hs -o part1
+    blocker: true
+- case_1:
+    run: ./part1
+    script:
+      - send: "sundays1 1901 2000"
+      - expect: "171"
+      - expect: _EOF_
+- case_2:
+    run: ./part1
+    script:
+      - send: "sundays1tr 1901 2000"
+      - expect: "171"
+      - expect: _EOF_
+- case_3:
+    run: ./part1
+    script:
+      - send: "sundays2 1901 2000"
+      - expect: "171"
+      - expect: _EOF_
+- cleanup:
+    run: rm -f part1 part1.o part1.hi
+    visible: false

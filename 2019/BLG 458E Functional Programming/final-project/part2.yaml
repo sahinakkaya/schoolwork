@@ -1,0 +1,44 @@
+- init:
+    run: rm -f part2 part2.o part2.hi
+    visible: false
+- compile:
+    run: ghc part2.hs -o part2
+    blocker: true
+- case_1:
+    run: ./part2
+    script:
+      - expect: "Enter cards:"
+      - send: "c1"
+      - send: "s1"
+      - send: "c1"
+      - send: "s1"
+      - send: "."
+      - expect: "Enter moves:"
+      - send: "d"
+      - send: "d"
+      - send: "d"
+      - send: "d"
+      - send: "."
+      - expect: "Enter goal:"
+      - send: "42"
+      - expect: "Score: 3"
+      - expect: _EOF_
+- case_2:
+    run: ./part2
+    script:
+      - expect: "Enter cards:"
+      - send: "cj"
+      - send: "s8"
+      - send: "."
+      - expect: "Enter moves:"
+      - send: "d"
+      - send: "rhj"
+      - send: "."
+      - expect: "Enter goal:"
+      - send: "42"
+      - expect: "part2: card not in list"
+      - expect: _EOF_
+    exit: 1
+- cleanup:
+    run: rm -f part2 part2.o part2.hi
+    visible: false
