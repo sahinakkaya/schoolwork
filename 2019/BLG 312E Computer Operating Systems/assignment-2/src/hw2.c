@@ -3,6 +3,11 @@ Author: Şahin Akkaya
 Studend ID: 150170098
 */
 
+/********************************************************** 
+* In order to compile in ITU's servers via ssh            *
+* gcc hw2.c -Wall -Werror -std=gnu99 -pthread -lm -o hw2  *
+***********************************************************/
+
 #include <math.h>     // ceil, sqrt
 #include <pthread.h>  // thread functions
 #include <stdbool.h>
