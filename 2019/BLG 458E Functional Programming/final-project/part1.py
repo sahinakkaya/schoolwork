@@ -39,15 +39,15 @@ def days_in_month(m, y):
 
 def sundays2(start, end):
     n = 0
-    weekday = 2
+    weekday = day_of_week(start, 1, 1)
     for y in range(start, end + 1):
         for m in range(1, 13):
+            if weekday % 7 == 1:
+                n += 1
             days = days_in_month(m, y)
             weekday += days % 7
-            if weekday % 7 == 0:
-                n += 1
     return n
 
-
-print(sundays1(1901, 2000))
-print(sundays2(1901, 2000))
+s, e = 1901, 2050
+print(sundays1(s, e))
+print(sundays2(s, e))
