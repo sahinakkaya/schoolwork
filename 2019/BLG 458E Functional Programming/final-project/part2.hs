@@ -5,10 +5,20 @@ data Suit = Clubs | Diamonds | Hearts | Spades deriving (Eq, Show)
 data Rank = Num Int | Jack | Queen | King | Ace deriving (Eq, Show)
 data Card = Card { suit :: Suit, rank :: Rank } deriving (Eq, Show)
 data Move = Draw | Discard Card deriving (Eq, Show)
-type State = [Card]    
+data State = Playing | Finished  -- State of the game is either Playing or Finished
 
-myCards = [Card Diamonds Jack, Card Diamonds (Num 5), Card Hearts Queen,
-           Card Spades Ace, Card Clubs Jack]
+-- It is said that "You have to explain *everything* in detail"
+-- but I won't do it in some parts of my code because I think 
+-- they are self explanatory. For example the following line
+-- don't need any explanation I think:
+
+-- if c == removed then cs else c:removeCard cs removed
+
+-- If I would do it, it would be basically repeating the code
+-- in human language: 
+-- if current card is to be removed return tail of cards else 
+-- combine head with the result of calling this function on tail.
+
 
 cardColor :: Card -> Color
 cardColor card = if suit card `elem` [Spades, Clubs] then Black else Red
@@ -17,36 +27,49 @@ cardValue :: Card -> Int
 cardValue card = case rank card of
     Num i -> i
     Ace   -> 11
-    _     -> 10
+    _     -> 10 -- This is safe because a card is created by convertCard function and
+                -- it will take care of invalid inputs
 
-removeCard :: State -> Card -> State
-removeCard [] _           = error "card not in list"
+removeCard :: [Card] -> Card -> [Card]
+removeCard [] _           = error "card not in list" -- removing anything from empty list will result in an error
 removeCard (c:cs) removed = if c == removed then cs else c:removeCard cs removed
 
-allSameColor :: State -> Bool
-allSameColor []     = True
-allSameColor (c:cs) =  and $ map(\c' -> cardColor c' == cardColor c) cs
+allSameColor :: [Card] -> Bool
+allSameColor []     = True                   -- assume that an empty card list is all same color
+allSameColor (c:cs) =  and $ map(\c' -> cardColor c' == cardColor c) cs -- check the colors of the cards at the tail of the list against
+                                                                        -- the color of head card. Applying 'and' function to the result
+                                                                        -- will make it terminate on first False value. And it will return
+                                                                        -- True only when all the items mapped to True.
 
-sumCards :: State -> Int
+sumCards :: [Card] -> Int
 sumCards cs = sumIter cs 0
     where
         sumIter [] acc = acc
         sumIter (c:cs') acc = sumIter cs' (acc + cardValue c)
 
-score :: State -> Int -> Int
+score :: [Card] -> Int -> Int
 score cs goal = if allSameColor cs then floor (fromIntegral (pre_scr) / 2) else pre_scr
     where
         sum = sumCards cs
         pre_scr = if sum > goal then 3 * (sum - goal) else goal - sum
 
 runGame :: [Card] -> [Move] -> Int -> Int
-runGame cs ms goal = score (playMoves cs ms []) goal
+runGame cs ms goal = score (playMoves cs ms [] Playing) goal
     where 
-        playMoves :: [Card] -> [Move] -> State -> State
-        playMoves _ [] hcl = hcl
-        playMoves cl (m:ms') hcl = case m of
-            Discard c -> playMoves cl ms' (removeCard hcl c)
-            Draw      -> if null cl || sumCards ((head cl):hcl) >= goal then ((head cl):hcl) else playMoves (tail cl) ms' (head cl: hcl)
+        playMoves :: [Card] -> [Move] -> [Card] ->  State -> [Card] -- This function will start by held-cards being empty list
+                                                        -- and will return the held-cards, when the State becomes Finished or no moves left.
+
+        playMoves _ [] hcl _       = hcl                -- if no moves left, return the held-cards
+        playMoves _ _ hcl Finished = hcl                -- if state is changed to Finished, return the held-cards
+        playMoves cl (m:ms') hcl s = case m of
+            Discard c -> playMoves cl ms' (removeCard hcl c) s -- if move is discard some card c, remove it from the held-cards and continue playing
+            Draw      -> if null cl then -- if move is draw and no more cards left
+                            playMoves cl ms' hcl Finished -- the game state changes to Finished to signal the end of the game
+                        else
+                            if sumCards ((head cl):hcl) >= goal then -- else if sum of the cards exceeds the goal after drawing a card from card list
+                                playMoves (tail cl) ms' (head cl: hcl) Finished -- the game ends after drawing the card from card list
+                            else playMoves (tail cl) ms' (head cl: hcl) s  -- else pop the top card of card-list and append it to the held-cards and continue playing 
+
 
 convertSuit :: Char -> Suit
 convertSuit c = case (toLower c) of
@@ -99,8 +122,8 @@ readMoves = do
                 if line == "." then do
                     return ms
                 else do
-                    let line' = take 3 $ concat $ replicate 3 line
-                    let [c, s, r] = line'
+                    let line' = take 3 $ concat $ replicate 3 line -- this will replicate whatever entered 3 times and take the first 3 chars
+                    let [c, s, r] = line'                          -- so that this operation will be always safe
                     let m = convertMove c s r
                     getMoves (m:ms) 
 
