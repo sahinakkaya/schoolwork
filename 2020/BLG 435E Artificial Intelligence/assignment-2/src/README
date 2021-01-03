@@ -1,0 +1,15 @@
+In order to run the code you need to install numpy.
+
+pip3 install numpy
+
+You need to use python3.6+
+
+Minimax algorithm: 
+python3 main.py input.txt m
+
+Alpha beta pruning [default]: 
+python3 main.py input.txt
+
+
+To perform analysis, you can uncomment the required lines in agents.py 
+I marked which lines to uncomment so it should be easy to find.
