@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def chunks(l, n):
+def chunks(lst, n):
     """Yield successive n-sized chunks from lst."""
     for i in range(0, len(lst), n):
         yield lst[i:i + n]
@@ -123,9 +123,11 @@ class Game:
 if __name__ == '__main__':
     import sys
     from agents import MiniMax, AlphaBeta
-    game = Game(sys.argv[1])
 
-    minimax_agent = MiniMax(game)
-    alpha_beta_agent = AlphaBeta(game)
-    print(minimax_agent.solve())
-    print(alpha_beta_agent.solve())
+    game = Game(sys.argv[1])
+    if len(sys.argv) > 2 and sys.argv[2] == 'm':
+        agent = MiniMax(game)
+    else:
+        agent = AlphaBeta(game)
+
+    print(agent.solve())
