@@ -1,0 +1,8 @@
+7	199	1
+W	W	W	W	W	W	W	W	W	W	W	W	W
+W	E	E	E	E	E	E	E	E	E	E	E	W
+W	E	W	E	E	E	W	W	W	W	W	E	W
+W	E	W	E	E	E	E	G1	E	E	W	E	W
+W	A1	E	W	W	W	W	W	W	W	W	E	W
+W	E	E	E	E	E	E	E	E	E	E	E	W
+W	W	W	W	W	W	W	W	W	W	W	W	W
