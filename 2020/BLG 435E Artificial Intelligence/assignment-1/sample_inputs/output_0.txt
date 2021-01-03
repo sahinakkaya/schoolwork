@@ -1,0 +1,10 @@
+9 2
+DU
+PL
+DL
+UU
+RU
+RU
+RL
+DL
+UD

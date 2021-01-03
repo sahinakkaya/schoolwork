@@ -1,0 +1,13 @@
+The assignment should be run with python3.7+ 
+You can use virtualenv to create the virtual environment:
+
+virtualenv venv -p python3.7
+source venv/bin/activate
+
+In order to install dependencies run:
+
+pip3 install -r requirements.txt
+
+Then run the program with:
+
+python3 main.py input.txt
