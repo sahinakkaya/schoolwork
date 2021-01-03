@@ -3,8 +3,8 @@ import numpy as np
 
 def chunks(l, n):
     """Yield successive n-sized chunks from lst."""
-    n = max(1, n)
-    return (l[i:i+n] for i in range(0, len(l), n))
+    for i in range(0, len(lst), n):
+        yield lst[i:i + n]
 
 
 class NotTerminalError(Exception):
