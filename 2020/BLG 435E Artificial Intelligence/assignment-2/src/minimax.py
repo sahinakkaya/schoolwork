@@ -12,15 +12,18 @@ class State:
 
     def __str__(self):
         r = []
+        row = 0
+        r.append('   0 1 2   3 4 5   6 7 8')
         for three_lines in chunks(self.grid, 3):
-            r.append('-'*21)
+            r.append('   ' + '-'*22)
             for line in three_lines:
                 x = []
                 for chunk in chunks(line, 3):
                     x.append(' '.join(' ' if i == 0 else str(i)
                                       for i in chunk))
-                r.append(' | '.join(x))
-        r.append('-'*21)
+                r.append(str(row) + ' |' + ' | '.join(x) + '|')
+                row += 1
+        r.append('   ' + '-'*22)
         return '\n'.join(r)
 
 
