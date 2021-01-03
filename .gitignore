@@ -5,3 +5,5 @@
 ignore_*
 **/cmake-build-debug/
 **/CMakeLists.txt
+**/*~
+**/*~
