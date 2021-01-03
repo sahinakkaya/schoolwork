@@ -38,6 +38,10 @@ class Game:
         self.initial_state = self.initalize_game(file_name)
 
     def initalize_game(self, file_name):
+        """
+        Initializes the game with given file and returns the initial
+        state
+        """
         with open(file_name) as f:
             grid = [list(map(int, line.strip().split())) for line in f]
 
@@ -55,6 +59,7 @@ class Game:
 
     def successors(self, state):
         """
+        Yields (action, state) pairs that are reachable from `state`
         """
         available_actions = self.actions(state.grid)
         turn = "MAX" if state.turn == "MIN" else "MIN"
@@ -117,5 +122,10 @@ class Game:
 
 if __name__ == '__main__':
     import sys
+    from agents import MiniMax, AlphaBeta
     game = Game(sys.argv[1])
-    print(game.initial_state)
+
+    minimax_agent = MiniMax(game)
+    alpha_beta_agent = AlphaBeta(game)
+    print(minimax_agent.solve())
+    print(alpha_beta_agent.solve())
