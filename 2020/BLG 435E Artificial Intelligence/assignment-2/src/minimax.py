@@ -1,8 +1,14 @@
 import numpy as np
+
+
 def chunks(l, n):
     """Yield successive n-sized chunks from lst."""
     n = max(1, n)
     return (l[i:i+n] for i in range(0, len(l), n))
+
+
+class NotTerminalError(Exception):
+    pass
 
 
 class State:
@@ -51,6 +57,13 @@ class Game:
         """Returns True if the current state is terminal, False otherwise"""
         available_actions = self.successors(state)
         return not any(available_actions.values())
+
+    def utility(self, state):
+        """Returns the utility of the state: 1 or -1. Raises  NotTerminalError
+        if the state is not terminal state"""
+        if not self.is_terminal(state):
+            raise NotTerminalError("non terminal state doesn't have any utility")
+        return -1 if state.turn == 'MAX' else 1
 
     @staticmethod
     def _get_box_numbers(grid, i, j):
