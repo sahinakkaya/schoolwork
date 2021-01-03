@@ -43,9 +43,14 @@ class Game:
         """
         Returns a dictionary of (coordinate, available_numbers) pairs
         """
-        empty_positions = np.argwhere(game.initial_state.grid == 0)
+        empty_positions = np.argwhere(state.grid == 0)
         return {(i, j): self._get_available_numbers(state.grid, i, j)
                 for i, j in empty_positions}
+
+    def is_terminal(self, state):
+        """Returns True if the current state is terminal, False otherwise"""
+        available_actions = self.successors(state)
+        return not any(available_actions.values())
 
     @staticmethod
     def _get_box_numbers(grid, i, j):
