@@ -45,17 +45,28 @@ class Game:
         turn = 'MAX'
         return State(grid, turn)
 
-    def successors(self, state):
+    def actions(self, grid):
         """
         Returns a dictionary of (coordinate, available_numbers) pairs
         """
-        empty_positions = np.argwhere(state.grid == 0)
-        return {(i, j): self._get_available_numbers(state.grid, i, j)
+        empty_positions = np.argwhere(grid == 0)
+        return {(i, j): self._get_available_numbers(grid, i, j)
                 for i, j in empty_positions}
+
+    def successors(self, state):
+        """
+        """
+        available_actions = self.actions(state.grid)
+        turn = "MAX" if state.turn == "MIN" else "MIN"
+        for (i, j), available_numbers in available_actions.items():
+            for num in available_numbers:
+                new_grid = np.copy(state.grid)
+                new_grid[i][j] = num
+                yield ((i, j), num), State(new_grid, turn)
 
     def is_terminal(self, state):
         """Returns True if the current state is terminal, False otherwise"""
-        available_actions = self.successors(state)
+        available_actions = self.actions(state.grid)
         return not any(available_actions.values())
 
     def utility(self, state):
