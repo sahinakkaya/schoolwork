@@ -1,0 +1,16 @@
+15	15	3
+W	W	W	W	W	W	W	W	W	W	W	W	W	W	W
+W	A3	G2	E	W	E	E	E	E	E	E	E	E	E	W
+W	E	W	E	W	W	W	W	W	W	W	W	W	E	W
+W	E	W	E	W	E	E	E	E	E	E	E	W	E	W
+W	E	W	E	W	E	W	W	W	W	W	E	W	E	W
+W	E	W	E	W	E	W	E	E	E	W	E	W	E	W
+W	E	W	E	W	E	W	G3	W	E	W	E	W	E	W
+W	E	W	E	E	E	W	A1	W	E	W	E	W	E	W
+W	E	W	E	W	E	W	W	W	E	W	E	W	E	W
+W	E	W	E	W	E	E	E	E	E	W	E	W	E	W
+W	E	W	E	W	E	E	E	E	E	W	E	W	E	W
+W	E	W	E	W	W	W	W	W	W	W	E	W	E	W
+W	E	W	E	E	E	E	E	E	E	W	E	W	E	W
+W	A2	E	E	W	W	W	W	W	E	W	E	E	G1	W
+W	W	W	W	W	W	W	W	W	W	W	W	W	W	W

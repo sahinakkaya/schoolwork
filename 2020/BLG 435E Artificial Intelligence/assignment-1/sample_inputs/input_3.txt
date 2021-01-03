@@ -1,0 +1,7 @@
+6	6	4
+W	W	W	W	W	W
+W	A1	G2	E	G4	W
+W	G3	E	E	E	W
+W	E	E	E	A3	W
+W	A4	E	A2	G1	W
+W	W	W	W	W	W

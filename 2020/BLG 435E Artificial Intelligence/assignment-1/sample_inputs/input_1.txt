@@ -1,0 +1,5 @@
+4	9	2
+W	W	W	W	W	W	W	W	W
+W	G2	A1	E	A2	E	E	G1	W
+W	W	W	W	W	W	E	W	W
+W	W	W	W	W	W	W	W	W
