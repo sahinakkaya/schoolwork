@@ -24,13 +24,14 @@ static const char* jsonfsVersion = "2021.01.14";
 #include <strings.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <sys/time.h>
 #include <unistd.h>
 #include "cJSON.h"
 
 // Global variables to store filename and root of the tree
 char* filename;
 cJSON* root;
-
+struct timespec spec;
 /******************************
  *
  * Helper functions
@@ -188,6 +189,7 @@ static int jsonfs_getattr(const char* path, struct stat* stbuf) {
   }
   stbuf->st_uid = getuid();
   stbuf->st_gid = getgid();
+  stbuf->st_mtime = spec.tv_sec;
 
   return res;
 }
@@ -336,7 +338,7 @@ int main(int argc, char* argv[]) {
   }
 
   printf("file: %s\n", filename);
-
+  clock_gettime(CLOCK_REALTIME, &spec);
   read_file_and_initalize_json();
   fuse_main(args.argc, args.argv, &jsonfs_oper, NULL);
 
