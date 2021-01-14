@@ -1,0 +1,29 @@
+{
+    "class": {
+        "operatingsystem": {
+            "students": {
+                "student1":"111111111",
+                "student2":"232323232",
+                "student3":"323232323"
+            }
+        },
+        "systemprogramming": {
+            "students": {
+                "student1":"111111111",
+                "student3":"323232323",
+                "student4":"444444444"
+            },
+            "teachers": {
+                "gokhansecinti":"123456789",
+                "turgutuyar":"2345678"
+            }
+        }
+    },
+    "club": {
+        "basketball": {
+            "students": {
+                "student1":"111111111"
+            }
+        }
+    }
+}
