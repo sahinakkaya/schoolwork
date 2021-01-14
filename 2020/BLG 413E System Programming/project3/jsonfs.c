@@ -24,6 +24,7 @@ static const char* jsonfsVersion = "2021.01.14";
 #include <strings.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <unistd.h>
 #include "cJSON.h"
 
 // Global variables to store filename and root of the tree
@@ -183,7 +184,10 @@ static int jsonfs_getattr(const char* path, struct stat* stbuf) {
       stbuf->st_nlink = 1;
       stbuf->st_size = strlen(node->valuestring);
     }
+
   }
+  stbuf->st_uid = getuid();
+  stbuf->st_gid = getgid();
 
   return res;
 }
