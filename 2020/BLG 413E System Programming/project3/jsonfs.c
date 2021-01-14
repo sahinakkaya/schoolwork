@@ -165,6 +165,7 @@ static int jsonfs_getattr(const char* path, struct stat* stbuf) {
   if (strcmp(path, "/") == 0) {
     stbuf->st_mode = S_IFDIR | 0755;
     stbuf->st_nlink = get_num_of_dirs(root) + 2;
+    stbuf->st_size = 4096;
   } else {
     // "/class/operatingsystems
 
@@ -176,6 +177,7 @@ static int jsonfs_getattr(const char* path, struct stat* stbuf) {
     if (is_dir) {
       stbuf->st_mode = S_IFDIR | 0755;
       stbuf->st_nlink = get_num_of_dirs(node) + 2;
+      stbuf->st_size = 4096;
     } else {
       stbuf->st_mode = S_IFREG | 0444;
       stbuf->st_nlink = 1;
