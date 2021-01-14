@@ -1,5 +1,5 @@
 /*
- * jsonfs - Display the contents of a JSON file as a directory using FUSE.
+ * jsonfs - Displays the contents of a JSON file as a directory using FUSE.
  *
  * 150150014 Ezgi Hasret Açıkgöz
  * 150160128 Emek Gözlüklü
@@ -136,6 +136,17 @@ char* trim_path(const char* path) {
   }
   return new_path;
 }
+
+int get_num_of_dirs(cJSON* node){
+    int num_of_dirs = 0;
+    node = node->child;
+    while(node != NULL){
+        int is_dir = cJSON_IsObject(node);
+        num_of_dirs += is_dir;
+        node = node->next;
+    }
+    return num_of_dirs;
+}
 /******************************
  *
  * Callbacks for FUSE
@@ -153,7 +164,7 @@ static int jsonfs_getattr(const char* path, struct stat* stbuf) {
   memset(stbuf, 0, sizeof(struct stat));
   if (strcmp(path, "/") == 0) {
     stbuf->st_mode = S_IFDIR | 0755;
-    stbuf->st_nlink = 2;
+    stbuf->st_nlink = get_num_of_dirs(root) + 2;
   } else {
     // "/class/operatingsystems
 
@@ -164,7 +175,7 @@ static int jsonfs_getattr(const char* path, struct stat* stbuf) {
     int is_dir = cJSON_IsObject(node);
     if (is_dir) {
       stbuf->st_mode = S_IFDIR | 0755;
-      stbuf->st_nlink = 2;
+      stbuf->st_nlink = get_num_of_dirs(node) + 2;
     } else {
       stbuf->st_mode = S_IFREG | 0444;
       stbuf->st_nlink = 1;
