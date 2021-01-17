@@ -4,8 +4,8 @@
  * 150150014 Ezgi Hasret Açıkgöz
  * 150160128 Emek Gözlüklü
  * 150170098 Şahin Akkaya
- * 
- * Compile: 
+ *
+ * Compile:
  * Download cJSON.c and cJSON.h from https://github.com/DaveGamble/cJSON
  * and put them in the same directory as this file.
  * gcc -Wall -Werror jsonfs.c cJSON.c -D_FILE_OFFSET_BITS=64 -lfuse -o jsonfs
@@ -23,8 +23,8 @@ static const char* jsonfsVersion = "2021.01.14";
 #include <string.h>
 #include <strings.h>
 #include <sys/stat.h>
-#include <sys/types.h>
 #include <sys/time.h>
+#include <sys/types.h>
 #include <unistd.h>
 #include "cJSON.h"
 
@@ -113,12 +113,10 @@ cJSON* go_to_path(const char* path) {
   while (i < len_dirs) {
     current_dir = dirs[i];
     node = find_child_with_name(node, current_dir);
-    if (node == NULL)
-      return NULL;
+    if (node == NULL) return NULL;
     i += 1;
   }
-  for (i = 0; i < len_dirs; i++)
-    free(dirs[i]);
+  for (i = 0; i < len_dirs; i++) free(dirs[i]);
   free(dirs);
   return node;
 }
@@ -139,15 +137,15 @@ char* trim_path(const char* path) {
   return new_path;
 }
 
-int get_num_of_dirs(cJSON* node){
-    int num_of_dirs = 0;
-    node = node->child;
-    while(node != NULL){
-        int is_dir = cJSON_IsObject(node);
-        num_of_dirs += is_dir;
-        node = node->next;
-    }
-    return num_of_dirs;
+int get_num_of_dirs(cJSON* node) {
+  int num_of_dirs = 0;
+  node = node->child;
+  while (node != NULL) {
+    int is_dir = cJSON_IsObject(node);
+    num_of_dirs += is_dir;
+    node = node->next;
+  }
+  return num_of_dirs;
 }
 /******************************
  *
@@ -173,8 +171,7 @@ static int jsonfs_getattr(const char* path, struct stat* stbuf) {
 
     // "/abcd/efgh
     cJSON* node = go_to_path(path);
-    if (node == NULL)
-      return -ENOENT;
+    if (node == NULL) return -ENOENT;
     int is_dir = cJSON_IsObject(node);
     if (is_dir) {
       stbuf->st_mode = S_IFDIR | 0755;
@@ -185,7 +182,6 @@ static int jsonfs_getattr(const char* path, struct stat* stbuf) {
       stbuf->st_nlink = 1;
       stbuf->st_size = strlen(node->valuestring);
     }
-
   }
   stbuf->st_uid = getuid();
   stbuf->st_gid = getgid();
@@ -193,11 +189,8 @@ static int jsonfs_getattr(const char* path, struct stat* stbuf) {
 
   return res;
 }
-static int jsonfs_readdir(const char* path,
-                          void* buf,
-                          fuse_fill_dir_t filler,
-                          off_t offset,
-                          struct fuse_file_info* fi) {
+static int jsonfs_readdir(const char* path, void* buf, fuse_fill_dir_t filler,
+                          off_t offset, struct fuse_file_info* fi) {
   cJSON* node = root;
   cJSON* child;
   (void)offset;
@@ -215,8 +208,7 @@ static int jsonfs_readdir(const char* path,
   } else {
     // "/club/basketball"
     node = go_to_path(path);
-    if (node == NULL)
-      return -ENOENT;
+    if (node == NULL) return -ENOENT;
     filler(buf, ".", NULL, 0);
     filler(buf, "..", NULL, 0);
     child = node->child;
@@ -228,18 +220,14 @@ static int jsonfs_readdir(const char* path,
   return 0;
 }
 
-static int jsonfs_read(const char* path,
-                       char* buf,
-                       size_t size,
-                       off_t offset,
+static int jsonfs_read(const char* path, char* buf, size_t size, off_t offset,
                        struct fuse_file_info* fi) {
   cJSON* node = go_to_path(path);
   size_t len;
   (void)fi;
   len = strlen(node->valuestring);
   if (offset < len) {
-    if (offset + size > len)
-      size = len - offset;
+    if (offset + size > len) size = len - offset;
     memcpy(buf, node->valuestring + offset, size);
   } else
     size = 0;
@@ -256,8 +244,7 @@ static int jsonfs_mkdir(const char* path, mode_t mode) {
 
   cJSON* new_dir = cJSON_CreateObject();
   cJSON_AddItemToObject(node, dirs[len_dirs - 1], new_dir);
-  for (int i = 0; i < len_dirs; i++)
-    free(dirs[i]);
+  for (int i = 0; i < len_dirs; i++) free(dirs[i]);
   free(dirs);
 
   char* string = cJSON_Print(root);
@@ -266,8 +253,7 @@ static int jsonfs_mkdir(const char* path, mode_t mode) {
   fclose(file);
   return 0;
 }
-static int jsonfs_mknod(const char* path, mode_t mode, dev_t rdev){
-
+static int jsonfs_mknod(const char* path, mode_t mode, dev_t rdev) {
   char** dirs = split_path(path);
   int len_dirs = get_depth(path);
 
@@ -278,21 +264,19 @@ static int jsonfs_mknod(const char* path, mode_t mode, dev_t rdev){
   cJSON* new_file = cJSON_CreateString("");
   cJSON_AddItemToObject(node, dirs[len_dirs - 1], new_file);
 
-  for (int i = 0; i < len_dirs; i++)
-    free(dirs[i]);
+  for (int i = 0; i < len_dirs; i++) free(dirs[i]);
   free(dirs);
   char* string = cJSON_Print(root);
   FILE* file = fopen(filename, "w");
   fputs(string, file);
   fclose(file);
-    return 0;
+  return 0;
 }
 
-static int jsonfs_utime(const char *path, struct utimbuf *buf)
-{
-    (void)path;
-    (void)buf;
-    return 0;
+static int jsonfs_utime(const char* path, struct utimbuf* buf) {
+  (void)path;
+  (void)buf;
+  return 0;
 }
 static struct fuse_operations jsonfs_oper = {
     .getattr = jsonfs_getattr,
@@ -317,9 +301,7 @@ static void usage(const char* progname) {
       progname);
 }
 
-static int jsonfs_parse_opt(void* data,
-                            const char* arg,
-                            int key,
+static int jsonfs_parse_opt(void* data, const char* arg, int key,
                             struct fuse_args* outargs) {
   (void)data;
 
