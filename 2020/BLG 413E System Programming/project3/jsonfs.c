@@ -266,11 +266,41 @@ static int jsonfs_mkdir(const char* path, mode_t mode) {
   fclose(file);
   return 0;
 }
+static int jsonfs_mknod(const char* path, mode_t mode, dev_t rdev){
+
+  char** dirs = split_path(path);
+  int len_dirs = get_depth(path);
+
+  char* trimmed_path = trim_path(path);
+  cJSON* node = go_to_path(trimmed_path);
+  printf("trimmed_path: %s\n", trimmed_path);
+  free(trimmed_path);
+  cJSON* new_file = cJSON_CreateString("");
+  cJSON_AddItemToObject(node, dirs[len_dirs - 1], new_file);
+
+  for (int i = 0; i < len_dirs; i++)
+    free(dirs[i]);
+  free(dirs);
+  char* string = cJSON_Print(root);
+  FILE* file = fopen(filename, "w");
+  fputs(string, file);
+  fclose(file);
+    return 0;
+}
+
+static int jsonfs_utime(const char *path, struct utimbuf *buf)
+{
+    (void)path;
+    (void)buf;
+    return 0;
+}
 static struct fuse_operations jsonfs_oper = {
     .getattr = jsonfs_getattr,
     .readdir = jsonfs_readdir,
     .mkdir = jsonfs_mkdir,
     .read = jsonfs_read,
+    .mknod = jsonfs_mknod,
+    .utime = jsonfs_utime,
 };
 static void usage(const char* progname) {
   fprintf(
