@@ -273,6 +273,26 @@ static int jsonfs_mknod(const char* path, mode_t mode, dev_t rdev) {
   return 0;
 }
 
+static int jsonfs_rm(const char *path)
+{
+  char** dirs = split_path(path);
+  int len_dirs = get_depth(path);
+
+  char* trimmed_path = trim_path(path);
+  cJSON* node = go_to_path(trimmed_path);
+  free(trimmed_path);
+
+  cJSON_DeleteItemFromObjectCaseSensitive(node, dirs[len_dirs - 1]);
+  for (int i = 0; i < len_dirs; i++) free(dirs[i]);
+  free(dirs);
+
+  char* string = cJSON_Print(root);
+  FILE* file = fopen(filename, "w");
+  fputs(string, file);
+  fclose(file);
+  return 0;
+}
+
 static int jsonfs_utime(const char* path, struct utimbuf* buf) {
   (void)path;
   (void)buf;
@@ -284,6 +304,8 @@ static struct fuse_operations jsonfs_oper = {
     .mkdir = jsonfs_mkdir,
     .read = jsonfs_read,
     .mknod = jsonfs_mknod,
+    .unlink = jsonfs_rm,
+    .rmdir = jsonfs_rm,
     .utime = jsonfs_utime,
 };
 static void usage(const char* progname) {
